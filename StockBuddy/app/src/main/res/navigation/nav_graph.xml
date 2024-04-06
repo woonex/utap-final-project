@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+            android:id="@+id/homeFragment"
+            android:name="io.woonex.stockBuddy.ui.HomeFragment"
+            android:label="Home" >
+        <action
+                android:id="@+id/action_homeFragment_to_favorites"
+                app:destination="@id/favorites" />
+        <action
+                android:id="@+id/action_homeFragment_to_oneStockFragment"
+                app:destination="@id/oneStockFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favorites"
+        android:name="io.woonex.stockBuddy.ui.Favorites"
+        android:label="Favorites">
+
+        <action
+            android:id="@+id/action_favorites_to_oneStockFragment"
+            app:destination="@id/oneStockFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/oneStockFragment"
+        android:name="io.woonex.stockBuddy.ui.OneStockFragment"
+        android:label="One Post"
+        tools:layout="@layout/fragment_one_stock">
+
+        <argument
+            android:name="post"
+            app:argType="edu.cs371m.reddit.api.RedditPost"
+        />
+    </fragment>
+
+</navigation>
