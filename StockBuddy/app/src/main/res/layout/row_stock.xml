@@ -1,18 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/name"
-        />
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:text="Google"
+            android:textSize="14dp"
+            android:layout_margin="4dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/abbreviation"
+            android:text="GOOG"
+            android:textSize="10dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            />
+
+    </LinearLayout>
+
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/abbreviation"
+        android:id="@+id/currentPrice"
+        android:text="100.00"
+        android:textSize="17dp"
+        android:layout_margin="3dp"
         />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open:"
+            android:textSize="8dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:id="@+id/openText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/openPrice"
+            android:text="95.00"
+            android:layout_gravity="center"
+            android:textSize="10dp"
+            android:layout_marginStart="3dp"
+            app:layout_constraintTop_toTopOf="@+id/openText"
+            app:layout_constraintStart_toEndOf="@+id/volumeText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Low:"
+            android:textSize="8dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:id="@+id/lowText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/openText"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lowPrice"
+            android:text="92.00"
+            android:layout_gravity="center"
+            android:textSize="10dp"
+            android:layout_marginStart="3dp"
+            app:layout_constraintTop_toTopOf="@+id/lowText"
+            app:layout_constraintStart_toEndOf="@+id/volumeText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="High:"
+            android:textSize="8dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:id="@+id/highText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lowText"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/highPrice"
+            android:text="105.00"
+            android:layout_gravity="center"
+            android:textSize="10dp"
+            android:layout_marginStart="3dp"
+            app:layout_constraintTop_toTopOf="@+id/highText"
+            app:layout_constraintStart_toEndOf="@+id/volumeText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Volume:"
+            android:textSize="8dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:id="@+id/volumeText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/highText"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/volume"
+            android:text="1000.5"
+            android:layout_gravity="center"
+            android:textSize="10dp"
+            android:layout_marginStart="3dp"
+            app:layout_constraintTop_toTopOf="@+id/volumeText"
+            app:layout_constraintStart_toEndOf="@+id/volumeText"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

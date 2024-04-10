@@ -35,7 +35,7 @@
 
         <argument
             android:name="post"
-            app:argType="edu.cs371m.reddit.api.RedditPost"
+            app:argType="io.woonex.stockBuddy.Stock"
         />
     </fragment>
 

@@ -48,6 +48,7 @@ class HomeFragment: Fragment() {
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
         adapter = postRowAdapter
+        adapter.submitList(listOf(Stock("google", "hello"), Stock("two", "2")))
     }
 
     override fun onCreateView(

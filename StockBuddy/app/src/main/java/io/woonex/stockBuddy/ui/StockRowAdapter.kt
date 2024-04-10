@@ -12,7 +12,7 @@ import io.woonex.stockBuddy.databinding.RowStockBinding
 import io.woonex.stockBuddy.Stock
 
 /**
- * Created by witchel on 8/25/2019
+ * Created by witchel on 8/25/2019 adapted by woonex on 04/07/2024
  */
 
 // https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
