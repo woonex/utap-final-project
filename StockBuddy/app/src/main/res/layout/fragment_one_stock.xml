@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
@@ -27,42 +28,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <include layout="@layout/fragment_name_abb_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:id="@+id/oneStockName"
-            android:textSize="20sp"
-            android:textColor="@android:color/holo_blue_dark"
-            android:text="Stock Name"
-            android:layout_margin="4dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/oneStockFavorite"
-            />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/oneStockAbbreviation"
-            android:textSize="20sp"
-            android:layout_margin="4dp"
-            android:text="Stock Abbr"
             app:layout_constraintStart_toEndOf="@+id/oneStockFavorite"
-            app:layout_constraintTop_toBottomOf="@id/oneStockName"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/oneStockPrice"
-            android:textSize="36dp"
-            android:padding="4sp"
-            android:text="Current Price"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
             />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,8 +47,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/topConstraint"
-        app:layout_constraintStart_toStartOf="parent"
         android:padding="4sp"
         >
 
@@ -102,8 +76,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/currentTrendsText"
-
-
                 />
 
 
@@ -342,7 +314,7 @@
                     />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/similarCompaniesText"
                     app:layout_constraintStart_toStartOf="parent"
@@ -351,43 +323,42 @@
                     android:layout_margin="8dp"
                     >
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <include layout="@layout/fragment_name_abb_price"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="companyName1"
-                            android:id="@+id/similarCompanyName1"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="companyPrice1"
-                            android:id="@+id/similarCompanyPrice1"
-                            />
-                    </LinearLayout>
+                        android:layout_margin="4dp"
+                        android:id="@+id/relatedStock1"
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+
+                        app:layout_constraintStart_toEndOf="@+id/oneStockFavorite"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+
+                        />
+
+                    <include layout="@layout/fragment_name_abb_price"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="companyName2"
-                            android:id="@+id/similarCompanyName2"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="companyPrice2"
-                            android:id="@+id/similarCompanyPrice2"
-                            />
-                    </LinearLayout>
+                        android:layout_margin="4dp"
+                        android:id="@+id/relatedStock2"
+
+                        app:layout_constraintStart_toEndOf="@+id/oneStockFavorite"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+
+                        />
+
+                    <include layout="@layout/fragment_name_abb_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:id="@+id/relatedStock3"
+
+                        app:layout_constraintStart_toEndOf="@+id/oneStockFavorite"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+
+                        />
                 </LinearLayout>
             </LinearLayout>
 
@@ -398,4 +369,4 @@
 
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

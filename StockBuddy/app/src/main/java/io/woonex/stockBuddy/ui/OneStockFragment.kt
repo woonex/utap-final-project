@@ -36,9 +36,9 @@ class OneStockFragment : Fragment() {
 
         viewModel.setTitle("One Stock")
 
-        val title = args.post.abbreviation
-
-
+        binding.oneStockName.oneStockAbbreviation.text=args.stock.abbreviation
+        binding.oneStockName.oneStockName.text=args.stock.name
+        binding.oneStockName.oneStockPrice.text="125.00"
     }
 
     override fun onDestroyView() {

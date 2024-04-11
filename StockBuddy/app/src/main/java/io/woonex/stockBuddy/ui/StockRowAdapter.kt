@@ -32,7 +32,7 @@ import java.util.Random
 //
 // You can call adapterPosition to get the index of the selected item
 class StockRowAdapter(private val viewModel: MainViewModel,
-                     private val navigateToOnePost: (Stock)->Unit )
+                     private val navigateToOneStock: (Stock)->Unit )
     : ListAdapter<Stock, StockRowAdapter.VH>(StockDiff()) {
 
     inner class VH(val rowPostBinding: RowStockBinding)
@@ -108,6 +108,10 @@ class StockRowAdapter(private val viewModel: MainViewModel,
         rowBinding.abbreviation.text = item.abbreviation
 
         setupLineChart(rowBinding.lineChart)
+
+        rowBinding.currentPrice.setOnClickListener {
+            navigateToOneStock(item)
+        }
     }
 }
 

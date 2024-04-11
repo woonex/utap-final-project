@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_one_stock">
 
         <argument
-            android:name="post"
+            android:name="stock"
             app:argType="io.woonex.stockBuddy.Stock"
         />
     </fragment>
