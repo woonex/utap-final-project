@@ -38,9 +38,7 @@ class OneStockFragment : Fragment() {
 
         val title = args.post.abbreviation
 
-        binding.onePostTitle.text = title
-        binding.onePostSelfText.text = title
-        binding.onePostSubreddit.text = title
+
     }
 
     override fun onDestroyView() {
