@@ -167,12 +167,42 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:text="Date:"
+                    android:id="@+id/recommendationDateText"
+                    android:textSize="20sp"
+                    android:layout_margin="5dp"
+                    android:gravity="end"
+
+                    app:layout_constraintTop_toBottomOf="@+id/expertRecommendationText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/recommendationDate"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Today"
+                    android:id="@+id/recommendationDate"
+                    android:textSize="20sp"
+                    android:layout_margin="5dp"
+                    android:gravity="start"
+
+                    app:layout_constraintTop_toBottomOf="@+id/expertRecommendationText"
+                    app:layout_constraintStart_toEndOf="@+id/recommendationDateText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:text="Hard Sell:"
                     android:id="@+id/hardSellText"
                     android:gravity="end"
                     android:layout_margin="4dp"
 
-                    app:layout_constraintTop_toBottomOf="@+id/expertRecommendationText"
+                    app:layout_constraintTop_toBottomOf="@+id/recommendationDate"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/hardSell"
                     />
@@ -235,7 +265,7 @@
                     android:layout_margin="4dp"
 
 
-                    app:layout_constraintTop_toBottomOf="@+id/expertRecommendationText"
+                    app:layout_constraintTop_toBottomOf="@+id/recommendationDate"
                     app:layout_constraintStart_toEndOf="@+id/hardSellText"
                     app:layout_constraintEnd_toEndOf="parent"
                     />

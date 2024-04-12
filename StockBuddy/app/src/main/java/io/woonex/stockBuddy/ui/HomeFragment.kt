@@ -40,7 +40,7 @@ class HomeFragment: Fragment() {
     private fun initAdapter(binding: FragmentRvBinding) {
         val postRowAdapter = StockRowAdapter(viewModel) {
             val navController = findNavController()
-            val action = HomeFragmentDirections.actionHomeFragmentToOneStockFragment(it)
+            val action = HomeFragmentDirections.actionHomeFragmentToOneStockFragment(it.abbreviation)
             navController.navigate(action)
         }
 
@@ -48,7 +48,7 @@ class HomeFragment: Fragment() {
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
         adapter = postRowAdapter
-        adapter.submitList(listOf(Stock("google", "hello"), Stock("two", "2")))
+        adapter.submitList(listOf(Stock("GOOG"), Stock("F")))
     }
 
     override fun onCreateView(

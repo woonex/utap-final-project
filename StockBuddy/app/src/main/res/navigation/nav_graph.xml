@@ -34,8 +34,8 @@
         tools:layout="@layout/fragment_one_stock">
 
         <argument
-            android:name="stock"
-            app:argType="io.woonex.stockBuddy.Stock"
+            android:name="stockAbbreviation"
+            app:argType="string"
         />
     </fragment>
 
