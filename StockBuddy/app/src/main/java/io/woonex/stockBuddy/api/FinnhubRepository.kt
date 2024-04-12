@@ -1,6 +1,7 @@
 package io.woonex.stockBuddy.api
 
 import io.finnhub.api.apis.DefaultApi
+import io.finnhub.api.models.EarningResult
 import io.finnhub.api.models.RecommendationTrend
 import io.woonex.stockBuddy.Quote
 
@@ -22,5 +23,9 @@ class FinnhubRepository(private val finnhubApi: DefaultApi) {
     suspend fun getName(symbol:String) :String {
         val search = finnhubApi.symbolSearch(symbol)
         return search.result?.get(0)?.description!!
+    }
+
+    suspend fun getEarningsReport(symbol: String): List<EarningResult> {
+        return finnhubApi.companyEarnings(symbol, limit = 10)
     }
 }

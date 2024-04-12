@@ -1,6 +1,7 @@
 package io.woonex.stockBuddy.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,10 @@ class OneStockFragment : Fragment() {
         //observe price
         viewModel.observeQuote().observe(viewLifecycleOwner) {
             binding.oneStockName.oneStockPrice.text = it.currentPrice.toString()
+        }
+
+        viewModel.observeEarnings().observe(viewLifecycleOwner) {
+            TODO("FINISH IMPLEMENTING EARNINGS")
         }
 
         //observer recommendations

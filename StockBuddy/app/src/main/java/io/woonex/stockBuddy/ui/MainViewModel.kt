@@ -8,6 +8,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.finnhub.api.models.EarningResult
+import io.finnhub.api.models.EarningsCalendar
 import io.finnhub.api.models.RecommendationTrend
 import io.woonex.stockBuddy.Quote
 import io.woonex.stockBuddy.Stock
@@ -73,6 +75,21 @@ class MainViewModel : ViewModel() {
 
     fun observeQuote() : LiveData<Quote> {
         return quote
+    }
+
+    private var earnings = MediatorLiveData<List<EarningResult>>().apply{
+        addSource(singleStockAbbr) {
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.IO) {
+                val earnings = finnhubRepo.getEarningsReport(it)
+                postValue(earnings)
+            }
+        }
+    }
+
+    fun observeEarnings() : LiveData<List<EarningResult>> {
+        return earnings
     }
 
     private var recommendation = MediatorLiveData<RecommendationTrend>().apply{
