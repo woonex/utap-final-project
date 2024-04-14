@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.data.Entry
 import io.finnhub.api.models.EarningResult
@@ -47,15 +48,18 @@ class OneStockFragment : Fragment() {
         binding.oneStockName.oneStockAbbreviation.text=args.stockAbbreviation
 
         //observe stock full name
+        binding.oneStockName.oneStockName.text = ""
         viewModel.observeSingleStockName().observe(viewLifecycleOwner) {
             binding.oneStockName.oneStockName.text = it
         }
 
         //observe price
+        binding.oneStockName.oneStockPrice.text = ""
         viewModel.observeQuote().observe(viewLifecycleOwner) {
             binding.oneStockName.oneStockPrice.text = it.currentPrice.toString()
         }
 
+        binding.lineChart.clear()
         viewModel.observeSingleHistorical().observe(viewLifecycleOwner) {
             val entries = mutableListOf<Entry>()
             //following the approach from here by Yasir-Ghunaim commented on Aug 22, 2016: https://github.com/PhilJay/MPAndroidChart/issues/789
@@ -72,6 +76,7 @@ class OneStockFragment : Fragment() {
             LineChartUtils.setupLineChart(binding.lineChart, entries, "Titles", axisValueFormatter)
         }
 
+        clearEarnings()
         viewModel.observeEarnings().observe(viewLifecycleOwner) {
             setEarning(it[0], binding.earningData1)
             setEarning(it[1], binding.earningData2)
@@ -80,6 +85,7 @@ class OneStockFragment : Fragment() {
         }
 
         //observer recommendations
+        clearRecommendation()
         viewModel.observeRecommendation().observe(viewLifecycleOwner) {
             val hardSell = it.strongSell!!
             val sell = it.sell!!
@@ -87,7 +93,6 @@ class OneStockFragment : Fragment() {
             val buy = it.buy!!
             val hardBuy = it.strongBuy!!
             val date = it.period
-
 
             val total = hardSell + sell + hold + buy + hardBuy
             binding.hardSell.text = String.format("%.1f%%", hardSell/total.toDouble() * 100.0)
@@ -105,6 +110,14 @@ class OneStockFragment : Fragment() {
         setRelated()
     }
 
+    private fun clearEarnings() {
+        val blank = EarningResult(0f, 0f, 0f, 0f, "", "", 0)
+        setEarning(blank, binding.earningData1)
+        setEarning(blank, binding.earningData2)
+        setEarning(blank, binding.earningData3)
+        setEarning(blank, binding.earningData4)
+    }
+
     private fun setEarning(earningResult: EarningResult, earningData: FragmentEarningsBinding) {
         earningData.date.text = earningResult.period
         earningData.actual.text = String.format("%.2f",earningResult.actual)
@@ -112,6 +125,15 @@ class OneStockFragment : Fragment() {
         earningData.surprisePercent.text = String.format("%.2f",earningResult.surprisePercent)
         val color = if (earningResult.surprisePercent!! >= 0f) Color.GREEN else Color.RED
         earningData.surprisePercent.setTextColor(color)
+    }
+
+    private fun clearRecommendation() {
+        binding.hardSell.text = ""
+        binding.sell.text = ""
+        binding.hold.text = ""
+        binding.buy.text = ""
+        binding.hardBuy.text = ""
+        binding.recommendationDate.text = ""
     }
 
     private fun setRelated(stocks: List<Stock> = listOf(Stock(""), Stock(""), Stock(""))) {
@@ -136,6 +158,12 @@ class OneStockFragment : Fragment() {
 
 
             field?.oneStockPrice?.text = if (stock.currentPrice == 0f) "" else String.format("%.2f", stock.currentPrice)
+
+            field?.root?.setOnClickListener {
+                val navController = findNavController()
+                val action = OneStockFragmentDirections.actionOneStockFragmentToOneStockFragment(stock.abbreviation)
+                navController.navigate(action)
+            }
         }
     }
 

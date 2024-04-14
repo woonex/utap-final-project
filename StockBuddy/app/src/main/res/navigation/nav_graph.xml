@@ -37,6 +37,10 @@
             android:name="stockAbbreviation"
             app:argType="string"
         />
+
+        <action
+            android:id="@+id/action_oneStockFragment_to_oneStockFragment"
+            app:destination="@id/oneStockFragment" />
     </fragment>
 
 </navigation>

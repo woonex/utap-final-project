@@ -160,6 +160,7 @@ class MainViewModel : ViewModel() {
 
     private var similar = MediatorLiveData<List<Stock>>().apply{
         addSource(singleStockAbbr) {currentStockAbbr ->
+            postValue(emptyList())
             viewModelScope.launch(
                 context = viewModelScope.coroutineContext
                         + Dispatchers.IO) {

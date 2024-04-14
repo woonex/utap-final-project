@@ -111,8 +111,7 @@ class StockRowAdapter(private val viewModel: MainViewModel,
         }
 
         LineChartUtils.setupLineChart(rowBinding.lineChart, entries)
-
-        rowBinding.currentPrice.setOnClickListener {
+        rowBinding.root.setOnClickListener {
             navigateToOneStock(item)
         }
     }
