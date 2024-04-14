@@ -4,8 +4,8 @@ import java.io.Serializable
 
 data class Stock(
     val abbreviation:String,
-    val name:String? = null,
-    val currentPrice:Float? = null
+    val name:String = "",
+    val currentPrice:Float = 0f
     ): Serializable {
 
     fun searchFor(searchTerm: String): Boolean {
@@ -13,6 +13,6 @@ data class Stock(
             return true
         }
 
-        return (name?.contains(searchTerm, true)!!) || abbreviation.contains(searchTerm, true)
+        return (name.contains(searchTerm, true)) || abbreviation.contains(searchTerm, true)
     }
 }

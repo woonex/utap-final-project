@@ -1,5 +1,6 @@
 package io.woonex.stockBuddy.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.github.mikephil.charting.data.Entry
+import io.finnhub.api.models.EarningResult
+import io.woonex.stockBuddy.AxisValueFormatter
+import io.woonex.stockBuddy.LineChartUtils
+import io.woonex.stockBuddy.Stock
+import io.woonex.stockBuddy.databinding.FragmentEarningsBinding
 import io.woonex.stockBuddy.databinding.FragmentOneStockBinding
 
 class OneStockFragment : Fragment() {
@@ -18,8 +25,6 @@ class OneStockFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: OneStockFragmentArgs by navArgs()
-
-//    private lateinit var
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +56,27 @@ class OneStockFragment : Fragment() {
             binding.oneStockName.oneStockPrice.text = it.currentPrice.toString()
         }
 
+        viewModel.observeSingleHistorical().observe(viewLifecycleOwner) {
+            val entries = mutableListOf<Entry>()
+            //following the approach from here by Yasir-Ghunaim commented on Aug 22, 2016: https://github.com/PhilJay/MPAndroidChart/issues/789
+
+            Log.d("First date:", it[0].date.toString())
+            Log.d("last date:", it[it.lastIndex].date.toString())
+            val xref: Long = it[0].date.toEpochDay()
+            val axisValueFormatter = AxisValueFormatter(xref)
+
+            for (timeData in it) {
+                entries.add(Entry((timeData.date.toEpochDay() - xref).toFloat(), timeData.stockPrice.closePrice.toFloat()))
+            }
+
+            LineChartUtils.setupLineChart(binding.lineChart, entries, "Titles", axisValueFormatter)
+        }
+
         viewModel.observeEarnings().observe(viewLifecycleOwner) {
-            TODO("FINISH IMPLEMENTING EARNINGS")
+            setEarning(it[0], binding.earningData1)
+            setEarning(it[1], binding.earningData2)
+            setEarning(it[2], binding.earningData3)
+            setEarning(it[3], binding.earningData4)
         }
 
         //observer recommendations
@@ -76,21 +100,42 @@ class OneStockFragment : Fragment() {
 
         //observe similar companies
         viewModel.observeSimilar().observe(viewLifecycleOwner) {
-            var i = 1
-            for (stock in it) {
-                val field = when (i) {
-                    1 -> binding.relatedStock1
-                    2 -> binding.relatedStock2
-                    3 -> binding.relatedStock3
-                    else -> null
-                }
+            setRelated(it)
+        }
+        setRelated()
+    }
 
-                field?.oneStockName?.text = stock.name
-                field?.oneStockAbbreviation?.text = stock.abbreviation
-                field?.oneStockPrice?.text = String.format("%.2f", stock.currentPrice)
+    private fun setEarning(earningResult: EarningResult, earningData: FragmentEarningsBinding) {
+        earningData.date.text = earningResult.period
+        earningData.actual.text = String.format("%.2f",earningResult.actual)
+        earningData.estimate.text = String.format("%.2f",earningResult.estimate)
+        earningData.surprisePercent.text = String.format("%.2f",earningResult.surprisePercent)
+        val color = if (earningResult.surprisePercent!! >= 0f) Color.GREEN else Color.RED
+        earningData.surprisePercent.setTextColor(color)
+    }
 
-                i++
+    private fun setRelated(stocks: List<Stock> = listOf(Stock(""), Stock(""), Stock(""))) {
+        var i = 1
+        for (stock in stocks) {
+            val field = when (i) {
+                1 -> binding.relatedStock1
+                2 -> binding.relatedStock2
+                3 -> binding.relatedStock3
+                else -> null
             }
+            i++
+
+            if (stock.name == "") {
+                field?.root?.visibility = View.GONE
+                continue
+            } else {
+                field?.root?.visibility = View.VISIBLE
+            }
+            field?.oneStockName?.text = stock.name
+            field?.oneStockAbbreviation?.text = stock.abbreviation
+
+
+            field?.oneStockPrice?.text = if (stock.currentPrice == 0f) "" else String.format("%.2f", stock.currentPrice)
         }
     }
 

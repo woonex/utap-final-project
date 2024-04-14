@@ -13,6 +13,10 @@ import io.finnhub.api.models.EarningsCalendar
 import io.finnhub.api.models.RecommendationTrend
 import io.woonex.stockBuddy.Quote
 import io.woonex.stockBuddy.Stock
+import io.woonex.stockBuddy.TimeScope
+import io.woonex.stockBuddy.alpha.TimeData
+import io.woonex.stockBuddy.api.AlphaApi
+import io.woonex.stockBuddy.api.AlphaRepository
 import io.woonex.stockBuddy.api.FinnhubApi
 import io.woonex.stockBuddy.api.FinnhubRepository
 //import io.woonex.stockBuddy.api.RedditApi
@@ -27,6 +31,9 @@ class MainViewModel : ViewModel() {
     private val finnhubApi = FinnhubApi.create()
     private val finnhubRepo = FinnhubRepository(finnhubApi)
 
+    private val alphaApi = AlphaApi.create()
+    private val alphaRepo = AlphaRepository(alphaApi)
+
     private var title = MutableLiveData<String>()
     fun observeTitle(): LiveData<String> {
         return title
@@ -36,7 +43,7 @@ class MainViewModel : ViewModel() {
     }
 
     private var singleStockAbbr = MutableLiveData<String>().apply{
-        value = "AAPL"
+        value = ""
     }
 
     private var singleStockName = MediatorLiveData<String>().apply{
@@ -59,6 +66,49 @@ class MainViewModel : ViewModel() {
      */
     fun setSingleStockAbbr(newSingleStock: String) {
         singleStockAbbr.value = newSingleStock
+    }
+
+    private var timeScope = MutableLiveData<TimeScope>().apply{
+        value = TimeScope.WEEKLY
+    }
+
+    fun setTimeScope(timeScope : TimeScope) {
+        this.timeScope.postValue(timeScope)
+    }
+
+    private val singleTimeData = MediatorLiveData<List<TimeData>>().apply {
+        addSource(singleStockAbbr) {
+            when (timeScope.value) {
+                TimeScope.WEEKLY -> {
+                    viewModelScope.launch(
+                        context = viewModelScope.coroutineContext
+                                + Dispatchers.IO) {
+                        postValue(alphaRepo.getWeekly(singleStockAbbr.value!!))
+                    }
+                }
+                else -> {
+                    Log.d("TODO", "Not yet implemented")
+                }
+            }
+        }
+        addSource(timeScope) {
+            when (timeScope.value) {
+                TimeScope.WEEKLY -> {
+                    viewModelScope.launch(
+                        context = viewModelScope.coroutineContext
+                                + Dispatchers.IO) {
+                        postValue(alphaRepo.getWeekly(singleStockAbbr.value!!))
+                    }
+                }
+                else -> {
+                    Log.d("TODO", "Not yet implemented")
+                }
+            }
+        }
+    }
+
+    fun observeSingleHistorical() : LiveData<List<TimeData>> {
+        return singleTimeData
     }
 
     private var quote = MediatorLiveData<Quote>().apply{
