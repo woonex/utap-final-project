@@ -51,7 +51,6 @@ class OneStockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel: MainViewModel by activityViewModels()
-        viewModel.hideActionBarFavorites()
 
         viewModel.setTitle("One Stock")
 
@@ -130,8 +129,8 @@ class OneStockFragment : Fragment() {
         setRelated()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         viewModel.showSearchBarNav()
         viewModel.showActionBarFavorites()
 

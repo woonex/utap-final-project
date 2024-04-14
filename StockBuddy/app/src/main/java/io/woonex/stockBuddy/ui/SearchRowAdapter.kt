@@ -27,7 +27,6 @@ class SearchRowAdapter(private val viewModel: MainViewModel,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRowAdapter.VH {
-        viewModel.showActionBarFavorites()
         val rowBinding = RowSearchBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false)
