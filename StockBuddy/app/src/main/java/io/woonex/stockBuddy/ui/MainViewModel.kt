@@ -42,6 +42,43 @@ class MainViewModel : ViewModel() {
         title.value = newTitle
     }
 
+    private var displayFavorites = MutableLiveData<List<Stock>>().apply {
+        value = mutableListOf()
+    }
+
+    fun observeDisplayFavorites() : LiveData<List<Stock>> {
+        return displayFavorites
+    }
+
+    private var favNames = MutableLiveData<List<String>>().apply {
+        value = mutableListOf()
+    }
+
+    fun isFavorite(abbr: String): Boolean {
+        Log.d("ViewModel", favNames.value.toString())
+        return favNames.value?.contains(abbr)!!
+    }
+
+    fun flipFavorite(abbr: String) : Boolean {
+        val initialList : MutableList<String> = favNames.value?.toMutableList() ?: return false
+        val data = if (isFavorite(abbr)) {
+            Log.d("ViewModel", "Removing favorite")
+            initialList.remove(abbr)
+            false
+        } else {
+            Log.d("ViewModel", "Adding favorite")
+            initialList.add(abbr)
+            true
+        }
+        favNames.postValue(initialList)
+        return data
+    }
+
+    fun buildFavorite(abbr : String) :Stock {
+        //TODO do more here
+        return Stock(abbr)
+    }
+
     private var singleStockAbbr = MutableLiveData<String>().apply{
         value = ""
     }
@@ -78,31 +115,10 @@ class MainViewModel : ViewModel() {
 
     private val singleTimeData = MediatorLiveData<List<TimeData>>().apply {
         addSource(singleStockAbbr) {
-            when (timeScope.value) {
-                TimeScope.WEEKLY -> {
-                    viewModelScope.launch(
-                        context = viewModelScope.coroutineContext
-                                + Dispatchers.IO) {
-                        postValue(alphaRepo.getWeekly(singleStockAbbr.value!!))
-                    }
-                }
-                else -> {
-                    Log.d("TODO", "Not yet implemented")
-                }
-            }
-        }
-        addSource(timeScope) {
-            when (timeScope.value) {
-                TimeScope.WEEKLY -> {
-                    viewModelScope.launch(
-                        context = viewModelScope.coroutineContext
-                                + Dispatchers.IO) {
-                        postValue(alphaRepo.getWeekly(singleStockAbbr.value!!))
-                    }
-                }
-                else -> {
-                    Log.d("TODO", "Not yet implemented")
-                }
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.IO) {
+                postValue(alphaRepo.getDaily(singleStockAbbr.value!!))
             }
         }
     }

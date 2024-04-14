@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.woonex.stockBuddy.MainActivity
+import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.databinding.FragmentRvBinding
 
@@ -47,8 +49,23 @@ class HomeFragment: Fragment() {
 //        viewModel.repoFetch()
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
+
+        binding.durationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d("woonex", "World")
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.d("woonex", resources.getStringArray(R.array.duration_choices)[position])
+            }
+        }
+
         adapter = postRowAdapter
+
+        //TODO need to fetch from repo for user
         adapter.submitList(listOf(Stock("GOOG"), Stock("F")))
+
+
     }
 
     override fun onCreateView(

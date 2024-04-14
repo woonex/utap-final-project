@@ -14,9 +14,12 @@ import com.github.mikephil.charting.data.Entry
 import io.finnhub.api.models.EarningResult
 import io.woonex.stockBuddy.AxisValueFormatter
 import io.woonex.stockBuddy.LineChartUtils
+import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.databinding.FragmentEarningsBinding
 import io.woonex.stockBuddy.databinding.FragmentOneStockBinding
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 class OneStockFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
@@ -36,6 +39,15 @@ class OneStockFragment : Fragment() {
         return binding.root
     }
 
+    private fun setFavorite(isFav: Boolean) {
+        val favIcon = if (isFav) {
+            R.drawable.ic_favorite_black_24dp
+        } else {
+            R.drawable.ic_favorite_border_black_24dp
+        }
+        binding.oneStockFavorite.setImageResource(favIcon)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel: MainViewModel by activityViewModels()
@@ -46,6 +58,14 @@ class OneStockFragment : Fragment() {
         //setup abbreviation
         viewModel.setSingleStockAbbr(args.stockAbbreviation)
         binding.oneStockName.oneStockAbbreviation.text=args.stockAbbreviation
+
+        //deal with favorites
+
+        setFavorite(viewModel.isFavorite(args.stockAbbreviation))
+        binding.oneStockFavorite.setOnClickListener {
+            val isNowFav = viewModel.flipFavorite(args.stockAbbreviation)
+            setFavorite(isNowFav)
+        }
 
         //observe stock full name
         binding.oneStockName.oneStockName.text = ""
@@ -66,11 +86,11 @@ class OneStockFragment : Fragment() {
 
             Log.d("First date:", it[0].date.toString())
             Log.d("last date:", it[it.lastIndex].date.toString())
-            val xref: Long = it[0].date.toEpochDay()
-            val axisValueFormatter = AxisValueFormatter(xref)
+            val xref: Long = it[0].date.toEpochSecond(ZoneOffset.UTC)
+            val axisValueFormatter = AxisValueFormatter(xref, true)
 
             for (timeData in it) {
-                entries.add(Entry((timeData.date.toEpochDay() - xref).toFloat(), timeData.stockPrice.closePrice.toFloat()))
+                entries.add(Entry((timeData.date.toEpochSecond(ZoneOffset.UTC) - xref).toFloat(), timeData.stockPrice.closePrice.toFloat()))
             }
 
             LineChartUtils.setupLineChart(binding.lineChart, entries, "Titles", axisValueFormatter)

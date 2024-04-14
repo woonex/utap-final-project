@@ -4,5 +4,7 @@ enum class TimeScope {
     DAILY,
     WEEKLY,
     MONTHLY,
-    YEARLY
+    ONE_YEAR,
+    FIVE_YEAR,
+    COMPLETE
 }

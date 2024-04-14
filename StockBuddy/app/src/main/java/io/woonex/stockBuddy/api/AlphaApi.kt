@@ -1,6 +1,7 @@
 package io.woonex.stockBuddy.api
 
 import com.google.gson.GsonBuilder
+import io.woonex.stockBuddy.alpha.InterdayData5
 import io.woonex.stockBuddy.alpha.WeeklyAlphaData
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -8,9 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface AlphaApi {
 
@@ -19,6 +17,9 @@ interface AlphaApi {
 
     @GET("/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo")
     suspend fun weeklyData() : WeeklyAlphaData
+
+    @GET("/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo")
+    suspend fun interdayData() : InterdayData5
 
     companion object {
         private const val key = "C4GO7JJ25MVWL5SR"

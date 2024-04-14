@@ -9,23 +9,23 @@
             android:id="@+id/homeFragment"
             android:name="io.woonex.stockBuddy.ui.HomeFragment"
             android:label="Home" >
-        <action
-                android:id="@+id/action_homeFragment_to_favorites"
-                app:destination="@id/favorites" />
+<!--        <action-->
+<!--                android:id="@+id/action_homeFragment_to_favorites"-->
+<!--                app:destination="@id/favorites" />-->
         <action
                 android:id="@+id/action_homeFragment_to_oneStockFragment"
                 app:destination="@id/oneStockFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/favorites"
-        android:name="io.woonex.stockBuddy.ui.Favorites"
-        android:label="Favorites">
+<!--    <fragment-->
+<!--        android:id="@+id/favorites"-->
+<!--        android:name="io.woonex.stockBuddy.ui.Favorites"-->
+<!--        android:label="Favorites">-->
 
-        <action
-            android:id="@+id/action_favorites_to_oneStockFragment"
-            app:destination="@id/oneStockFragment" />
-    </fragment>
+<!--        <action-->
+<!--            android:id="@+id/action_favorites_to_oneStockFragment"-->
+<!--            app:destination="@id/oneStockFragment" />-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/oneStockFragment"

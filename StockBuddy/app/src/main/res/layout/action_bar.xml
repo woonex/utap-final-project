@@ -35,4 +35,14 @@
             android:src="@drawable/ic_favorite_black_24dp"
             android:contentDescription="favorites" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lougout"
+        android:src="@drawable/ic_clear_black_24dp"
+        android:contentDescription="logout"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        />
+
 </LinearLayout>

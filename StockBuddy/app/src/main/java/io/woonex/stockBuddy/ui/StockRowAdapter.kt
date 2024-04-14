@@ -1,6 +1,8 @@
 package io.woonex.stockBuddy.ui
 
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -46,58 +48,49 @@ class StockRowAdapter(private val viewModel: MainViewModel,
         return VH(rowBinding)
     }
 
-//    private fun setupLineChart(lineChart: LineChart) {
-//        val xAxis: XAxis = lineChart.xAxis
-//        xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.setDrawGridLines(false)
-//        xAxis.setDrawAxisLine(true)
-//        xAxis.setDrawLabels(true)
-//
-//        val yAxisRight: YAxis = lineChart.axisRight
-//        yAxisRight.setDrawLabels(true)
-//        yAxisRight.setDrawAxisLine(true)
-//        yAxisRight.setDrawGridLines(false)
-//        yAxisRight.setDrawZeroLine(false)
-//        val random = Random()
-//
-//        val entries = mutableListOf<Entry>()
-//
-//        var lastEntry = 50f;
-//        for (i in 0 until 100) {
-//            val sign = if (random.nextBoolean()) 1 else -1
-//            lastEntry += random.nextFloat() * 5 * sign
-//            entries.add(Entry(i.toFloat(), lastEntry))
-//        }
-//
-//        lineChart.description.isEnabled = false
-//        lineChart.legend.isEnabled = false
-//        lineChart.setDrawMarkers(false)
-//
-//        val dataSet = LineDataSet(entries, "Stock Prices")
-//        val first = entries[0]
-//        val last = entries[entries.size - 1]
-//
-//        dataSet.color = if (first.y > last.y) {
-//            Color.RED
-//        } else {
-//            Color.GREEN
-//        }
-//        dataSet.valueTextColor = Color.BLACK
-//        dataSet.setDrawValues(false)
-//        dataSet.setDrawCircles(false)
-//
-//        val lineData = LineData(dataSet)
-//        lineChart.data = lineData
-//        lineData.setDrawValues(false)
-//
-//        lineChart.invalidate()
-//    }
-
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
         val rowBinding = holder.rowPostBinding
-        rowBinding.name.text = item.name
         rowBinding.abbreviation.text = item.abbreviation
+        rowBinding.currentPrice.text = item.currentPrice.toString()
+
+
+        if (item.open == null) {
+            rowBinding.openPrice.visibility = View.INVISIBLE
+            rowBinding.openText.visibility = View.INVISIBLE
+        } else {
+            rowBinding.openPrice.visibility = View.VISIBLE
+            rowBinding.openText.visibility = View.VISIBLE
+        }
+        rowBinding.openPrice.text = item.open.toString()
+
+        if (item.low == null) {
+            rowBinding.lowPrice.visibility = View.INVISIBLE
+            rowBinding.lowText.visibility = View.INVISIBLE
+        } else {
+            rowBinding.lowPrice.visibility = View.VISIBLE
+            rowBinding.lowText.visibility = View.VISIBLE
+        }
+        rowBinding.lowPrice.text = item.low.toString()
+
+        if (item.high == null) {
+            rowBinding.highPrice.visibility = View.INVISIBLE
+            rowBinding.highText.visibility = View.INVISIBLE
+        } else {
+            rowBinding.highPrice.visibility = View.VISIBLE
+            rowBinding.highText.visibility = View.VISIBLE
+        }
+        rowBinding.highPrice.text = item.high.toString()
+
+
+        if (item.volume == null) {
+            rowBinding.volume.visibility = View.INVISIBLE
+            rowBinding.volumeText.visibility = View.INVISIBLE
+        } else {
+            rowBinding.volume.visibility = View.VISIBLE
+            rowBinding.volumeText.visibility = View.VISIBLE
+        }
+        rowBinding.volume.text = item.volume.toString()
 
         val random = Random()
 
