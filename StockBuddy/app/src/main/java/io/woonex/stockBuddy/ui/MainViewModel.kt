@@ -3,15 +3,20 @@ package io.woonex.stockBuddy.ui
 
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import io.finnhub.api.models.EarningResult
 import io.finnhub.api.models.EarningsCalendar
 import io.finnhub.api.models.RecommendationTrend
+import io.finnhub.api.models.SymbolLookupInfo
 import io.woonex.stockBuddy.Quote
+import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.TimeScope
 import io.woonex.stockBuddy.alpha.TimeData
@@ -205,6 +210,30 @@ class MainViewModel : ViewModel() {
         return similar
     }
 
+    fun setSearchTerm(query : String) {
+        favoritesSearch.postValue(query)
+    }
+
+    private var favoritesSearch = MutableLiveData<String>().apply {
+        value = ""
+    }
+
+    private var searchResults = MediatorLiveData<List<SymbolLookupInfo>>().apply {
+        addSource(favoritesSearch) {
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.IO) {
+                val recommend = finnhubRepo.searchForSymbol(it)
+                postValue(recommend)
+            }
+        }
+
+    }
+
+    fun observeSearchResults() : LiveData<List<SymbolLookupInfo>> {
+        return searchResults
+    }
+
     /////////////////////////
     // Action bar
     fun initActionBarBinding(it: ActionBarBinding) {
@@ -215,5 +244,21 @@ class MainViewModel : ViewModel() {
     }
     fun showActionBarFavorites() {
         actionBarBinding?.actionFavorite?.visibility = View.VISIBLE
+    }
+
+    fun getFavorite(): ImageView? {
+        return actionBarBinding?.actionFavorite
+    }
+
+    fun getSearch() :ImageView? {
+        return actionBarBinding?.search
+    }
+
+    fun hideSearchBarNav() {
+        actionBarBinding?.search?.visibility = View.GONE
+    }
+
+    fun showSearchBarNav() {
+        actionBarBinding?.search?.visibility = View.VISIBLE
     }
 }

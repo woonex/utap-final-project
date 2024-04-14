@@ -42,7 +42,6 @@ class StockRowAdapter(private val viewModel: MainViewModel,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        viewModel.showActionBarFavorites()
         val rowBinding = RowStockBinding.inflate(LayoutInflater.from(parent.context),
             parent, false)
         return VH(rowBinding)

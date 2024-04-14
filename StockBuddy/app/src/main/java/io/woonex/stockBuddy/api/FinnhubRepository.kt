@@ -3,6 +3,8 @@ package io.woonex.stockBuddy.api
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.EarningResult
 import io.finnhub.api.models.RecommendationTrend
+import io.finnhub.api.models.SymbolLookup
+import io.finnhub.api.models.SymbolLookupInfo
 import io.woonex.stockBuddy.Quote
 
 class FinnhubRepository(private val finnhubApi: DefaultApi) {
@@ -27,5 +29,13 @@ class FinnhubRepository(private val finnhubApi: DefaultApi) {
 
     suspend fun getEarningsReport(symbol: String): List<EarningResult> {
         return finnhubApi.companyEarnings(symbol, limit = 10)
+    }
+
+    suspend fun searchForSymbol(query : String) : List<SymbolLookupInfo> {
+        if (query == "") {
+            return emptyList()
+        }
+
+        return finnhubApi.symbolSearch(query).result!!
     }
 }

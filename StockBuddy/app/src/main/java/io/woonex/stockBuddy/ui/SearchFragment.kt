@@ -14,35 +14,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.woonex.stockBuddy.MainActivity
 import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.Stock
-import io.woonex.stockBuddy.databinding.FragmentRvBinding
+import io.woonex.stockBuddy.databinding.SearchRvBinding
 
-class HomeFragment: Fragment() {
+class SearchFragment: Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
 
-    private var _binding: FragmentRvBinding? = null
+    private var _binding: SearchRvBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var adapter :StockRowAdapter
-
-    companion object {
-        fun getFilteredList(searchTerm: String, original: List<Stock>) :List<Stock> {
-            val filteredList = mutableListOf<Stock>()
-            for (current in original) {
-                val isFound: Boolean = current.searchFor(searchTerm)
-                if (isFound) {
-                    filteredList.add(current)
-                }
-            }
-
-            return filteredList
-        }
-    }
+    private lateinit var adapter :SearchRowAdapter
 
     // Set up the adapter and recycler view
-    private fun initAdapter(binding: FragmentRvBinding) {
-        val postRowAdapter = StockRowAdapter(viewModel) {
+    private fun initAdapter(binding: SearchRvBinding) {
+        val postRowAdapter = SearchRowAdapter(viewModel) {
             val navController = findNavController()
-            val action = HomeFragmentDirections.actionHomeFragmentToOneStockFragment(it.abbreviation)
+            val action = SearchFragmentDirections.actionSearchToOneStockFragment(it.abbreviation)
             navController.navigate(action)
         }
 
@@ -50,20 +36,23 @@ class HomeFragment: Fragment() {
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-        binding.durationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d("woonex", "World")
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.d("woonex", resources.getStringArray(R.array.duration_choices)[position])
-            }
+        binding.searchGo.setOnClickListener {
+            //TODO get the data from the search
+            //TODO display the search
+            viewModel.setSearchTerm(binding.actionSearch.text.toString())
+            val main = context as MainActivity
+            main.hideKeyboard()
         }
+
+        viewModel.observeSearchResults().observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
 
         adapter = postRowAdapter
 
         //TODO need to fetch from repo for user
-        adapter.submitList(listOf(Stock("GOOG"), Stock("F")))
+        adapter.submitList(listOf())
 
 
     }
@@ -73,7 +62,7 @@ class HomeFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRvBinding.inflate(inflater, container, false)
+        _binding = SearchRvBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -89,11 +78,11 @@ class HomeFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.hideActionBarFavorites()
-        viewModel.showSearchBarNav()
-        viewModel.getSearch()?.setOnClickListener {
+        viewModel.hideSearchBarNav()
+        viewModel.showActionBarFavorites()
+        viewModel.getFavorite()?.setOnClickListener {
             val navController = findNavController()
-            val action = HomeFragmentDirections.actionHomeFragmentToSearch()
+            val action = SearchFragmentDirections.actionSearchToHomeFragment()
             navController.navigate(action)
         }
     }

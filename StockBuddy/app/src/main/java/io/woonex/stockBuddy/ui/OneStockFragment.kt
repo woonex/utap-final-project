@@ -130,6 +130,24 @@ class OneStockFragment : Fragment() {
         setRelated()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.showSearchBarNav()
+        viewModel.showActionBarFavorites()
+
+        viewModel.getFavorite()?.setOnClickListener {
+            val navController = findNavController()
+            val action = OneStockFragmentDirections.actionOneStockFragmentToHomeFragment()
+            navController.navigate(action)
+        }
+
+        viewModel.getSearch()?.setOnClickListener {
+            val navController = findNavController()
+            val action = OneStockFragmentDirections.actionOneStockFragmentToSearchFragment()
+            navController.navigate(action)
+        }
+    }
+
     private fun clearEarnings() {
         val blank = EarningResult(0f, 0f, 0f, 0f, "", "", 0)
         setEarning(blank, binding.earningData1)
