@@ -9,19 +9,32 @@ import io.finnhub.api.models.SymbolLookupInfo
 
 class FinnhubRepository(private val finnhubApi: DefaultApi) {
     suspend fun getQuote(symbol: String): Quote {
-        return finnhubApi.quote(symbol)
+        return try {
+            finnhubApi.quote(symbol)
+        } catch (e : Exception) {
+            Quote()
+        }
     }
 
     suspend fun getRecommendation(symbol:String): RecommendationTrend {
-        val allData = finnhubApi.recommendationTrends(symbol)
-        if (allData.isEmpty()) {
-            return RecommendationTrend(buy=0, hold=0, sell=0, strongBuy = 0, strongSell = 0)
+        try {
+            val allData = finnhubApi.recommendationTrends(symbol)
+            if (allData.isEmpty()) {
+                return RecommendationTrend()
+            }
+            return allData[0]
+        } catch (e : Exception) {
+            return RecommendationTrend()
         }
-        return allData[0]
+
     }
 
     suspend fun getSimilar(symbol:String): List<String> {
-        return finnhubApi.companyPeers(symbol, "subIndustry")
+        return try {
+            return finnhubApi.companyPeers(symbol, "subIndustry")
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     suspend fun getName(symbol:String) :String {
@@ -30,7 +43,11 @@ class FinnhubRepository(private val finnhubApi: DefaultApi) {
     }
 
     suspend fun getEarningsReport(symbol: String): List<EarningResult> {
-        return finnhubApi.companyEarnings(symbol, limit = 10)
+        return try {
+            finnhubApi.companyEarnings(symbol, limit = 10)
+        } catch (e : Exception) {
+            emptyList()
+        }
     }
 
     suspend fun searchForSymbol(query : String) : List<SymbolLookupInfo> {

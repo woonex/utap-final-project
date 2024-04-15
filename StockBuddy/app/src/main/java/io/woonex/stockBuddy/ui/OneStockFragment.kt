@@ -73,7 +73,7 @@ class OneStockFragment : Fragment() {
         //observe price
         binding.oneStockName.oneStockPrice.text = ""
         viewModel.observeQuote().observe(viewLifecycleOwner) {
-            binding.oneStockName.oneStockPrice.text = it.c.toString()
+            binding.oneStockName.oneStockPrice.text = String.format("%.2f", it.c)
         }
 
         binding.lineChart.clear()
@@ -95,21 +95,26 @@ class OneStockFragment : Fragment() {
 
         clearEarnings()
         viewModel.observeEarnings().observe(viewLifecycleOwner) {
-            setEarning(it[0], binding.earningData1)
-            setEarning(it[1], binding.earningData2)
-            setEarning(it[2], binding.earningData3)
-            setEarning(it[3], binding.earningData4)
+            if (it.isEmpty()) {
+                clearEarnings()
+
+            } else {
+                setEarning(it[0], binding.earningData1)
+                setEarning(it[1], binding.earningData2)
+                setEarning(it[2], binding.earningData3)
+                setEarning(it[3], binding.earningData4)
+            }
         }
 
         //observer recommendations
         clearRecommendation()
-        viewModel.observeRecommendation().observe(viewLifecycleOwner) {
-            val hardSell = it.strongSell!!
-            val sell = it.sell!!
-            val hold = it.hold!!
-            val buy = it.buy!!
-            val hardBuy = it.strongBuy!!
-            val date = it.period
+        viewModel.observeRecommendation().observe(viewLifecycleOwner) { recommendationTrend ->
+            val hardSell = recommendationTrend.strongSell ?:0
+            val sell = recommendationTrend.sell ?:0
+            val hold = recommendationTrend.hold ?:0
+            val buy = recommendationTrend.buy?:0
+            val hardBuy = recommendationTrend.strongBuy?:0
+            val date = recommendationTrend.period
 
             val total = hardSell + sell + hold + buy + hardBuy + 0.000_001
             binding.hardSell.text = String.format("%.1f%%", hardSell/total * 100.0)
@@ -192,7 +197,8 @@ class OneStockFragment : Fragment() {
             field?.oneStockAbbreviation?.text = stock.abbreviation
 
 
-            field?.oneStockPrice?.text = if (stock.currentPrice == 0f) "" else String.format("%.2f", stock.currentPrice)
+            field?.oneStockPrice?.text = if (stock.currentPrice == 0f || stock.currentPrice == null) ""
+                else String.format("%.2f", stock.currentPrice)
 
             field?.root?.setOnClickListener {
                 val navController = findNavController()

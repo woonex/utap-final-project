@@ -7,7 +7,7 @@
     <TextView
             android:id="@+id/actionTitle"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_gravity="start|center_vertical"
             android:textSize="18sp"
@@ -15,19 +15,11 @@
             android:textStyle="bold"
             android:text="@string/app_name"/>
 
-<!--    <EditText-->
-<!--            android:id="@+id/actionSearch"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:minEms="16"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="3"-->
-<!--            android:layout_margin="8dp"-->
-<!--            android:layout_gravity="end|center_vertical"-->
-<!--            android:hint="search"-->
-<!--            android:autofillHints=""-->
-<!--            android:imeOptions="actionSearch"-->
-<!--            android:inputType="text"-->
-<!--            android:padding="8dp" />-->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -35,7 +27,7 @@
         android:id="@+id/search"
         android:src="@drawable/ic_search_black_24dp"
         android:layout_margin="4dp"
-
+        android:contentDescription="search"
         />
 
     <ImageView

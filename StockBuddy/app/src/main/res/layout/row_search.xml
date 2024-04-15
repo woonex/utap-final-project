@@ -13,10 +13,10 @@
         android:textSize="40sp"
         android:layout_margin="5dp"
         android:text="displaySymbol"
+        android:textColor="@android:color/holo_blue_dark"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -29,55 +29,61 @@
         android:layout_margin="5dp"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/displaySymbol"
-        app:layout_constraintEnd_toStartOf="@id/symbolText"
+        app:layout_constraintBottom_toTopOf="@+id/symbol"
+
         />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/symbolText"
         android:text="Unique Symbol:"
         android:textSize="12sp"
         android:layout_margin="5dp"
+        android:gravity="end"
 
-        app:layout_constraintStart_toEndOf="@+id/description"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/symbol"
 
-        app:layout_constraintTop_toTopOf="@+id/description"
-        app:layout_constraintBottom_toBottomOf="@id/description"
+        app:layout_constraintTop_toTopOf="@+id/symbol"
+        app:layout_constraintBottom_toBottomOf="@id/symbol"
         />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/symbol"
         android:text="symbol"
         android:textSize="20sp"
         android:layout_margin="5dp"
+        android:gravity="center"
+        android:textColor="@android:color/holo_green_dark"
 
         app:layout_constraintStart_toEndOf="@+id/symbolText"
         app:layout_constraintEnd_toStartOf="@+id/type"
 
-        app:layout_constraintTop_toTopOf="@+id/description"
-        app:layout_constraintBottom_toBottomOf="@id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/type"
         android:layout_margin="5dp"
         android:gravity="end"
         android:text="hello"
+        android:textColor="@android:color/darker_gray"
 
         app:layout_constraintStart_toEndOf="@+id/symbol"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintTop_toTopOf="@+id/description"
-        app:layout_constraintBottom_toBottomOf="@id/description"
+        app:layout_constraintTop_toTopOf="@+id/symbol"
+        app:layout_constraintBottom_toBottomOf="@id/symbol"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

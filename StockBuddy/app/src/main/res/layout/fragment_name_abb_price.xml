@@ -10,29 +10,29 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/oneStockName"
+        android:id="@+id/oneStockAbbreviation"
         android:textSize="20sp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:text="Stock Name"
         android:layout_margin="4dp"
-        android:gravity="start"
+        android:text="Stock Abbr"
+        android:textColor="@android:color/holo_blue_dark"
 
-
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/oneStockPrice"
         />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/oneStockAbbreviation"
+        android:id="@+id/oneStockName"
         android:textSize="20sp"
+        android:text="Stock Name"
         android:layout_margin="4dp"
-        android:text="Stock Abbr"
+        android:gravity="start"
 
+
+        app:layout_constraintTop_toBottomOf="@id/oneStockAbbreviation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/oneStockName"
         app:layout_constraintEnd_toStartOf="@+id/oneStockPrice"
         />
 

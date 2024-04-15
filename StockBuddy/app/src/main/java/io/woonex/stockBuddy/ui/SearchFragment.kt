@@ -45,6 +45,17 @@ class SearchFragment: Fragment() {
         }
 
         viewModel.observeSearchResults().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.notificationArea.visibility = View.VISIBLE
+                if (binding.actionSearch.text.toString().isNullOrEmpty()) {
+                    binding.notificationArea.text = "Enter a search term and then click the magnifying glass"
+                } else {
+                    binding.notificationArea.text = "No items matching provided search criteria." +
+                            "\nPlease try again!"
+                }
+            } else {
+                binding.notificationArea.visibility = View.GONE
+            }
             adapter.submitList(it)
         }
 
@@ -65,9 +76,8 @@ class SearchFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(javaClass.simpleName, "onViewCreated")
-        // XXX Write me.  Set title based on current subreddit
-        initAdapter(this.binding)
 
+        initAdapter(this.binding)
         val title = "Stocks"
         viewModel.setTitle(title)
     }
@@ -77,6 +87,7 @@ class SearchFragment: Fragment() {
         viewModel.setSearchTerm("")
         viewModel.hideSearchBarNav()
         viewModel.showActionBarFavorites()
+
         viewModel.getFavorite()?.setOnClickListener {
             val navController = findNavController()
             val action = SearchFragmentDirections.actionSearchToHomeFragment()
