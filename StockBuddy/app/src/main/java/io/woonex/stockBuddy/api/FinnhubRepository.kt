@@ -2,19 +2,21 @@ package io.woonex.stockBuddy.api
 
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.EarningResult
+import io.finnhub.api.models.Quote
 import io.finnhub.api.models.RecommendationTrend
 import io.finnhub.api.models.SymbolLookup
 import io.finnhub.api.models.SymbolLookupInfo
-import io.woonex.stockBuddy.Quote
 
 class FinnhubRepository(private val finnhubApi: DefaultApi) {
     suspend fun getQuote(symbol: String): Quote {
-        val stuff= finnhubApi.quote(symbol)
-        return Quote(stuff.c!!, stuff.h!!, stuff.l!!, stuff.o!!, stuff.pc!!)
+        return finnhubApi.quote(symbol)
     }
 
     suspend fun getRecommendation(symbol:String): RecommendationTrend {
         val allData = finnhubApi.recommendationTrends(symbol)
+        if (allData.isEmpty()) {
+            return RecommendationTrend(buy=0, hold=0, sell=0, strongBuy = 0, strongSell = 0)
+        }
         return allData[0]
     }
 

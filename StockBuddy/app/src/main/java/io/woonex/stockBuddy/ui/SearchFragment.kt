@@ -31,8 +31,8 @@ class SearchFragment: Fragment() {
             val action = SearchFragmentDirections.actionSearchToOneStockFragment(it.abbreviation)
             navController.navigate(action)
         }
+        adapter = postRowAdapter
 
-//        viewModel.repoFetch()
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
 
@@ -48,13 +48,9 @@ class SearchFragment: Fragment() {
             adapter.submitList(it)
         }
 
-
-        adapter = postRowAdapter
+        adapter.submitList(emptyList())
 
         //TODO need to fetch from repo for user
-        adapter.submitList(listOf())
-
-
     }
 
     override fun onCreateView(
@@ -78,6 +74,7 @@ class SearchFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+        viewModel.setSearchTerm("")
         viewModel.hideSearchBarNav()
         viewModel.showActionBarFavorites()
         viewModel.getFavorite()?.setOnClickListener {

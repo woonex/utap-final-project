@@ -62,7 +62,7 @@
                 android:textSize="20sp"
                 android:layout_marginStart="3dp"
                 app:layout_constraintTop_toTopOf="@+id/openText"
-                app:layout_constraintStart_toEndOf="@+id/volumeText"
+                app:layout_constraintStart_toEndOf="@+id/changeText"
                 />
 
             <TextView
@@ -86,7 +86,7 @@
                 android:textSize="20sp"
                 android:layout_marginStart="3dp"
                 app:layout_constraintTop_toTopOf="@+id/lowText"
-                app:layout_constraintStart_toEndOf="@+id/volumeText"
+                app:layout_constraintStart_toEndOf="@+id/changeText"
                 />
 
             <TextView
@@ -110,17 +110,17 @@
                 android:textSize="20sp"
                 android:layout_marginStart="3dp"
                 app:layout_constraintTop_toTopOf="@+id/highText"
-                app:layout_constraintStart_toEndOf="@+id/volumeText"
+                app:layout_constraintStart_toEndOf="@+id/changeText"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Volume:"
+                android:text="Change:"
                 android:textSize="16sp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:id="@+id/volumeText"
+                android:id="@+id/changeText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/highText"
                 />
@@ -128,13 +128,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/volume"
-                android:text="1000.5"
+                android:id="@+id/change"
+                android:text="1.51"
                 android:layout_gravity="center"
                 android:textSize="20sp"
                 android:layout_marginStart="3dp"
-                app:layout_constraintTop_toTopOf="@+id/volumeText"
-                app:layout_constraintStart_toEndOf="@+id/volumeText"
+                app:layout_constraintTop_toTopOf="@+id/changeText"
+                app:layout_constraintStart_toEndOf="@+id/changeText"
                 />
 
 

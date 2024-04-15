@@ -62,11 +62,23 @@ class HomeFragment: Fragment() {
 
         adapter = postRowAdapter
 
-        //TODO need to fetch from repo for user
-        adapter.submitList(listOf(Stock("GOOG"), Stock("F")))
-
-
+        handleRvListSubmission(listOf())
+        viewModel.observeDisplayFavorites().observe(viewLifecycleOwner) {
+            handleRvListSubmission(it)
+        }
     }
+
+    private fun handleRvListSubmission(stocks : List<Stock>) {
+        if (stocks.isEmpty()) {
+            binding.recyclerView.visibility = View.GONE
+            binding.noFavoritesNotice.visibility = View.VISIBLE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.noFavoritesNotice.visibility = View.GONE
+        }
+        adapter.submitList(stocks)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

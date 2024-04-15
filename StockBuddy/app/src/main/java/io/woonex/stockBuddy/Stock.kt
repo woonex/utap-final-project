@@ -6,11 +6,11 @@ import java.io.Serializable
 data class Stock(
     val abbreviation:String,
     val name:String = "",
-    val currentPrice:Float = 0f,
+    val currentPrice:Float? = 0f,
     val open : Float? = null,
     val low : Float? = null,
     val high: Float? = null,
-    val volume : Float? = null,
+    val change : Float? = null,
     val favorite: Boolean = false,
     val historicalData: List<TimeData>? = null
     ): Serializable {
@@ -21,5 +21,9 @@ data class Stock(
         }
 
         return (name.contains(searchTerm, true)) || abbreviation.contains(searchTerm, true)
+    }
+
+    override fun toString(): String {
+        return abbreviation
     }
 }

@@ -13,9 +13,9 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import io.finnhub.api.models.EarningResult
 import io.finnhub.api.models.EarningsCalendar
+import io.finnhub.api.models.Quote
 import io.finnhub.api.models.RecommendationTrend
 import io.finnhub.api.models.SymbolLookupInfo
-import io.woonex.stockBuddy.Quote
 import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.TimeScope
@@ -28,8 +28,13 @@ import io.woonex.stockBuddy.api.FinnhubRepository
 //import io.woonex.stockBuddy.api.RedditPost
 //import io.woonex.stockBuddy.api.RedditPostRepository
 import io.woonex.stockBuddy.databinding.ActionBarBinding
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.stream.Collectors
 
 class MainViewModel : ViewModel() {
     private var actionBarBinding : ActionBarBinding? = null
@@ -45,14 +50,6 @@ class MainViewModel : ViewModel() {
     }
     fun setTitle(newTitle: String) {
         title.value = newTitle
-    }
-
-    private var displayFavorites = MutableLiveData<List<Stock>>().apply {
-        value = mutableListOf()
-    }
-
-    fun observeDisplayFavorites() : LiveData<List<Stock>> {
-        return displayFavorites
     }
 
     private var favNames = MutableLiveData<List<String>>().apply {
@@ -79,9 +76,77 @@ class MainViewModel : ViewModel() {
         return data
     }
 
-    fun buildFavorite(abbr : String) :Stock {
+    private var previousFavNames :List<String> = emptyList()
+    private var previousDisplayFavs :List<Stock> = emptyList()
+
+    private var displayFavorites = MediatorLiveData<List<Stock>>().apply {
+        addSource(favNames) { names ->
+            Log.d("ViewModel", "submitted names: $names")
+            Log.d("ViewModel", "Previous display favs: $previousDisplayFavs")
+            val added = names.subtract(previousFavNames)
+            val removed = previousFavNames.subtract(names)
+
+            Log.d("ViewModel", "added: " + added.toString())
+            Log.d("ViewModel", "removed: " + removed.toString())
+
+            var newStocks: MutableList<Stock> = mutableListOf()
+            newStocks.addAll(previousDisplayFavs)
+
+            //filter out stocks that were already a favorite to minimize network requests
+            newStocks = newStocks.stream()
+                .filter {
+                    !removed.contains(it.abbreviation)
+                }
+                .peek{
+                    Log.d("ViewModel", "stock in new stock: " + it.abbreviation)
+                }
+                .collect(Collectors.toList()).toMutableList()
+
+            //add the stocks that were added by the user
+            Log.d("ViewModel", "All stocks gathered: $newStocks")
+
+            viewModelScope.launch {
+                val builtStocks = buildFavoritesAsync(added).await()
+                Log.d("ViewModel", "All built stocks: $builtStocks")
+
+                newStocks.addAll(builtStocks)
+                Log.d("ViewModel", "All display stocks: $newStocks")
+                previousDisplayFavs = newStocks
+                postValue(newStocks)
+
+                previousFavNames = names
+            }
+
+        }
+    }
+
+    fun observeDisplayFavorites() : LiveData<List<Stock>> {
+        return displayFavorites
+    }
+
+    fun buildFavoritesAsync(added: Collection<String>): Deferred<List<Stock>> = viewModelScope.async {
+        val deferredList = added.map { abbr ->
+            viewModelScope.async {
+                buildFavorite(abbr)
+            }
+        }
+        deferredList.awaitAll()
+    }
+
+    suspend fun buildFavorite(abbr : String) :Stock {
         //TODO do more here
-        return Stock(abbr)
+        return withContext(Dispatchers.IO) {
+            val quote = finnhubRepo.getQuote(abbr)
+            Stock(abbr,
+                currentPrice = quote.c,
+                open=quote.o,
+                low=quote.l,
+                high=quote.h,
+                change=quote.d,
+                favorite = true)
+        }
+
+
     }
 
     private var singleStockAbbr = MutableLiveData<String>().apply{
@@ -90,6 +155,7 @@ class MainViewModel : ViewModel() {
 
     private var singleStockName = MediatorLiveData<String>().apply{
         addSource(singleStockAbbr) {singleStockAbbr ->
+            postValue("")
             viewModelScope.launch(
                 context = viewModelScope.coroutineContext
                         + Dispatchers.IO) {
@@ -192,7 +258,7 @@ class MainViewModel : ViewModel() {
                 var i = 0;
                 for (abbr in allRecommend) {
                     val name = finnhubRepo.getName(abbr)
-                    val price = finnhubRepo.getQuote(abbr).currentPrice
+                    val price = finnhubRepo.getQuote(abbr).c
                     if (price != 0f) {
                         fullStocks.add(Stock(abbr, name, price))
                         i++

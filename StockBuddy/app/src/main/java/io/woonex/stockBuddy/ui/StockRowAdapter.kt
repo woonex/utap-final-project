@@ -1,6 +1,6 @@
 package io.woonex.stockBuddy.ui
 
-import android.opengl.Visibility
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +29,13 @@ class StockRowAdapter(private val viewModel: MainViewModel,
                      private val navigateToOneStock: (Stock)->Unit )
     : ListAdapter<Stock, StockRowAdapter.VH>(StockDiff()) {
 
+        companion object {
+            private fun formatDecimal(data : Float?) :String {
+                return String.format("%.2f", data)
+            }
+
+        }
+
     inner class VH(val rowPostBinding: RowStockBinding)
         : RecyclerView.ViewHolder(rowPostBinding.root)
 
@@ -51,7 +58,7 @@ class StockRowAdapter(private val viewModel: MainViewModel,
         val item = getItem(position)
         val rowBinding = holder.rowPostBinding
         rowBinding.abbreviation.text = item.abbreviation
-        rowBinding.currentPrice.text = item.currentPrice.toString()
+        rowBinding.currentPrice.text = formatDecimal(item.currentPrice)
 
 
         if (item.open == null) {
@@ -61,7 +68,7 @@ class StockRowAdapter(private val viewModel: MainViewModel,
             rowBinding.openPrice.visibility = View.VISIBLE
             rowBinding.openText.visibility = View.VISIBLE
         }
-        rowBinding.openPrice.text = item.open.toString()
+        rowBinding.openPrice.text = formatDecimal(item.open)
 
         if (item.low == null) {
             rowBinding.lowPrice.visibility = View.INVISIBLE
@@ -70,7 +77,7 @@ class StockRowAdapter(private val viewModel: MainViewModel,
             rowBinding.lowPrice.visibility = View.VISIBLE
             rowBinding.lowText.visibility = View.VISIBLE
         }
-        rowBinding.lowPrice.text = item.low.toString()
+        rowBinding.lowPrice.text = formatDecimal(item.low)
 
         if (item.high == null) {
             rowBinding.highPrice.visibility = View.INVISIBLE
@@ -79,17 +86,26 @@ class StockRowAdapter(private val viewModel: MainViewModel,
             rowBinding.highPrice.visibility = View.VISIBLE
             rowBinding.highText.visibility = View.VISIBLE
         }
-        rowBinding.highPrice.text = item.high.toString()
+        rowBinding.highPrice.text = formatDecimal(item.high)
 
 
-        if (item.volume == null) {
-            rowBinding.volume.visibility = View.INVISIBLE
-            rowBinding.volumeText.visibility = View.INVISIBLE
+        if (item.change == null) {
+            rowBinding.change.visibility = View.INVISIBLE
+            rowBinding.changeText.visibility = View.INVISIBLE
         } else {
-            rowBinding.volume.visibility = View.VISIBLE
-            rowBinding.volumeText.visibility = View.VISIBLE
+            rowBinding.change.visibility = View.VISIBLE
+            rowBinding.changeText.visibility = View.VISIBLE
         }
-        rowBinding.volume.text = item.volume.toString()
+        val color = when (item.change) {
+            null -> Color.BLACK
+            else -> if (item.change >= 0) {
+                Color.GREEN
+            } else {
+                Color.RED
+            }
+        }
+        rowBinding.change.setTextColor(color)
+        rowBinding.change.text = formatDecimal(item.change)
 
         val random = Random()
 

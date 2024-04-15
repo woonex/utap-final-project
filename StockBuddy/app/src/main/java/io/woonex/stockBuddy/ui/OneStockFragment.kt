@@ -59,7 +59,6 @@ class OneStockFragment : Fragment() {
         binding.oneStockName.oneStockAbbreviation.text=args.stockAbbreviation
 
         //deal with favorites
-
         setFavorite(viewModel.isFavorite(args.stockAbbreviation))
         binding.oneStockFavorite.setOnClickListener {
             val isNowFav = viewModel.flipFavorite(args.stockAbbreviation)
@@ -67,7 +66,6 @@ class OneStockFragment : Fragment() {
         }
 
         //observe stock full name
-        binding.oneStockName.oneStockName.text = ""
         viewModel.observeSingleStockName().observe(viewLifecycleOwner) {
             binding.oneStockName.oneStockName.text = it
         }
@@ -75,7 +73,7 @@ class OneStockFragment : Fragment() {
         //observe price
         binding.oneStockName.oneStockPrice.text = ""
         viewModel.observeQuote().observe(viewLifecycleOwner) {
-            binding.oneStockName.oneStockPrice.text = it.currentPrice.toString()
+            binding.oneStockName.oneStockPrice.text = it.c.toString()
         }
 
         binding.lineChart.clear()
@@ -113,12 +111,12 @@ class OneStockFragment : Fragment() {
             val hardBuy = it.strongBuy!!
             val date = it.period
 
-            val total = hardSell + sell + hold + buy + hardBuy
-            binding.hardSell.text = String.format("%.1f%%", hardSell/total.toDouble() * 100.0)
-            binding.sell.text = String.format("%.1f%%", sell/total.toDouble() * 100.0)
-            binding.hold.text = String.format("%.1f%%", hold/total.toDouble() * 100.0)
-            binding.buy.text = String.format("%.1f%%", buy/total.toDouble() * 100.0)
-            binding.hardBuy.text = String.format("%.1f%%", hardBuy/total.toDouble() * 100.0)
+            val total = hardSell + sell + hold + buy + hardBuy + 0.000_001
+            binding.hardSell.text = String.format("%.1f%%", hardSell/total * 100.0)
+            binding.sell.text = String.format("%.1f%%", sell/total * 100.0)
+            binding.hold.text = String.format("%.1f%%", hold/total * 100.0)
+            binding.buy.text = String.format("%.1f%%", buy/total * 100.0)
+            binding.hardBuy.text = String.format("%.1f%%", hardBuy/total * 100.0)
             binding.recommendationDate.text = date
         }
 
