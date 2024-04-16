@@ -13,7 +13,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 class LineChartUtils {
     companion object {
         fun setupLineChart(
-            lineChart: LineChart, entries: List<Entry>,
+            lineChart: LineChart,
+            entries: List<Entry>,
             title: String = "Stock Prices",
             xAxisFormatter: ValueFormatter? = null) {
 

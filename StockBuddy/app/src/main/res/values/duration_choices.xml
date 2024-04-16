@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="duration_choices">
-        <item>Day</item>
         <item>Week</item>
         <item>Month</item>
         <item>1 Year</item>

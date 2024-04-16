@@ -1,6 +1,7 @@
 package io.woonex.stockBuddy.api
 
 import com.google.gson.GsonBuilder
+import io.woonex.stockBuddy.alpha.DailyAlphaData
 import io.woonex.stockBuddy.alpha.InterdayData5
 import io.woonex.stockBuddy.alpha.WeeklyAlphaData
 import okhttp3.HttpUrl
@@ -20,6 +21,9 @@ interface AlphaApi {
 
     @GET("/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo")
     suspend fun interdayData() : InterdayData5
+
+    @GET("/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo")
+    suspend fun dailyData() : DailyAlphaData
 
     companion object {
         private const val key = "C4GO7JJ25MVWL5SR"

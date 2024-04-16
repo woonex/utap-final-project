@@ -21,11 +21,11 @@ class AlphaRepository (private val alphaApi : AlphaApi) {
     }
 
     suspend fun getDaily(symbol: String) : List<TimeData> {
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//        var allData = alphaApi.interdayData(symbol).interday5.entries.stream()
-        var allData = alphaApi.interdayData().interday5.entries.stream()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//        var allData = alphaApi.dailyData(symbol).dailyAlphaData.entries.stream()
+        var allData = alphaApi.dailyData().dailyAlphaData.entries.stream()
             .map {
-                TimeData(LocalDateTime.parse(it.key, dateFormatter), it.value)
+                TimeData(LocalDate.parse(it.key, dateFormatter).atStartOfDay(), it.value)
             }
             .collect(Collectors.toList())
 

@@ -17,6 +17,7 @@ import io.finnhub.api.models.Quote
 import io.finnhub.api.models.RecommendationTrend
 import io.finnhub.api.models.SymbolLookupInfo
 import io.woonex.stockBuddy.R
+import io.woonex.stockBuddy.SortOrder
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.TimeScope
 import io.woonex.stockBuddy.alpha.TimeData
@@ -120,6 +121,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun setDisplayFavorites(displays: List<Stock>) {
+        this.displayFavorites.postValue(displays)
+    }
+
     fun observeDisplayFavorites() : LiveData<List<Stock>> {
         return displayFavorites
     }
@@ -137,15 +142,16 @@ class MainViewModel : ViewModel() {
         //TODO do more here
         return withContext(Dispatchers.IO) {
             val quote = finnhubRepo.getQuote(abbr)
+            val historical = alphaRepo.getDaily(abbr)
             Stock(abbr,
                 currentPrice = quote.c,
                 open=quote.o,
                 low=quote.l,
                 high=quote.h,
                 change=quote.d,
-                favorite = true)
+                favorite = true,
+                historicalData = historical)
         }
-
 
     }
 
@@ -176,12 +182,28 @@ class MainViewModel : ViewModel() {
         singleStockAbbr.value = newSingleStock
     }
 
+    private var sortOrder = MutableLiveData<SortOrder>().apply {
+        value = SortOrder.LOW_PRICE
+    }
+
+    fun setSortOrder(sortOrder: SortOrder) {
+        this.sortOrder.postValue(sortOrder)
+    }
+
+    fun observeSortOrder() :LiveData<SortOrder> {
+        return this.sortOrder
+    }
+
     private var timeScope = MutableLiveData<TimeScope>().apply{
         value = TimeScope.WEEKLY
     }
 
     fun setTimeScope(timeScope : TimeScope) {
         this.timeScope.postValue(timeScope)
+    }
+
+    fun observeTimeScope() : MutableLiveData<TimeScope> {
+        return this.timeScope
     }
 
     private val singleTimeData = MediatorLiveData<List<TimeData>>().apply {
