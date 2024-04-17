@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "391279256402",
+    "project_id": "utap-final-woonex",
+    "storage_bucket": "utap-final-woonex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391279256402:android:b91147d7ec0967964c108b",
+        "android_client_info": {
+          "package_name": "io.woonex.stockBuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZLbUomN3HmXIS6HMioYLcelyZiO7URkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

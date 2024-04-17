@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private var actionBarBinding: ActionBarBinding? = null
     private val viewModel: MainViewModel by viewModels()
     private lateinit var navController : NavController
+    private lateinit var authUser: AuthUser
 
     // An Android nightmare
     // https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         // Apply the custom view
         actionBar.customView = actionBarBinding?.root
         viewModel.initActionBarBinding(actionBarBinding!!)
+
+        actionBarBinding?.lougout?.setOnClickListener {
+            authUser.logout()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +48,19 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(activityMainBinding.toolbar)
         supportActionBar?.let{
             initActionBar(it)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        authUser = AuthUser(activityResultRegistry)
+        // authUser needs to observe our lifecycle so it can run login activity
+        lifecycle.addObserver(authUser)
+
+        authUser.observeUser().observe(this) {
+            // XXX Write me, user status has changed
+            viewModel.setCurrentAuthUser(it)
         }
     }
 }

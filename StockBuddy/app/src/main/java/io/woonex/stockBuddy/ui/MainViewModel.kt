@@ -20,6 +20,7 @@ import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.SortOrder
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.TimeScope
+import io.woonex.stockBuddy.User
 import io.woonex.stockBuddy.alpha.TimeData
 import io.woonex.stockBuddy.api.AlphaApi
 import io.woonex.stockBuddy.api.AlphaRepository
@@ -29,6 +30,7 @@ import io.woonex.stockBuddy.api.FinnhubRepository
 //import io.woonex.stockBuddy.api.RedditPost
 //import io.woonex.stockBuddy.api.RedditPostRepository
 import io.woonex.stockBuddy.databinding.ActionBarBinding
+import io.woonex.stockBuddy.invalidUser
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -45,6 +47,10 @@ class MainViewModel : ViewModel() {
     private val alphaApi = AlphaApi.create()
     private val alphaRepo = AlphaRepository(alphaApi)
 
+    private var currentAuthUser = invalidUser
+    fun setCurrentAuthUser(user: User) {
+        currentAuthUser = user
+    }
     private var title = MutableLiveData<String>()
     fun observeTitle(): LiveData<String> {
         return title
