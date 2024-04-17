@@ -16,6 +16,8 @@ import io.finnhub.api.models.EarningsCalendar
 import io.finnhub.api.models.Quote
 import io.finnhub.api.models.RecommendationTrend
 import io.finnhub.api.models.SymbolLookupInfo
+import io.woonex.stockBuddy.DbHelper
+import io.woonex.stockBuddy.Favorite
 import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.SortOrder
 import io.woonex.stockBuddy.Stock
@@ -47,10 +49,13 @@ class MainViewModel : ViewModel() {
     private val alphaApi = AlphaApi.create()
     private val alphaRepo = AlphaRepository(alphaApi)
 
+    private val dbHelp = DbHelper()
+
     private var currentAuthUser = invalidUser
     fun setCurrentAuthUser(user: User) {
         currentAuthUser = user
     }
+
     private var title = MutableLiveData<String>()
     fun observeTitle(): LiveData<String> {
         return title
@@ -59,31 +64,62 @@ class MainViewModel : ViewModel() {
         title.value = newTitle
     }
 
-    private var favNames = MutableLiveData<List<String>>().apply {
+
+
+    private var favNames = MutableLiveData<List<Favorite>>().apply {
         value = mutableListOf()
+    }
+
+    fun fetchUserFavs() {
+        dbHelp.fetchFavorites(currentAuthUser.uid) {
+            favNames.postValue(it)
+        }
+    }
+
+    fun setUserFavs(favs: List<Favorite>) {
+        favNames.postValue(favs)
+    }
+
+    private fun findFavorite(abbr: String) : Favorite? {
+        return favNames.value?.stream()?.filter {
+            it.stockName == abbr
+        }?.findFirst()?.orElse(null)
     }
 
     fun isFavorite(abbr: String): Boolean {
         Log.d("ViewModel", favNames.value.toString())
-        return favNames.value?.contains(abbr)!!
+        val found =  favNames.value?.stream()?.filter {
+            it.stockName == abbr
+        }?.findFirst()?.orElse(null)
+
+        return found != null
     }
 
     fun flipFavorite(abbr: String) : Boolean {
-        val initialList : MutableList<String> = favNames.value?.toMutableList() ?: return false
+        val initialList : MutableList<Favorite> = favNames.value?.toMutableList() ?: return false
         val data = if (isFavorite(abbr)) {
             Log.d("ViewModel", "Removing favorite")
-            initialList.remove(abbr)
+            val fav = findFavorite(abbr)!!
+            dbHelp.removeFavorite(fav,
+                {
+                    fetchUserFavs()
+            }, {})
+            initialList.remove(fav)
             false
         } else {
             Log.d("ViewModel", "Adding favorite")
-            initialList.add(abbr)
+            val fav = Favorite(currentAuthUser.uid, abbr)
+            dbHelp.addFavorite(fav, {
+                fetchUserFavs()
+            }, {})
+            initialList.add(fav)
             true
         }
         favNames.postValue(initialList)
         return data
     }
 
-    private var previousFavNames :List<String> = emptyList()
+    private var previousFavNames :List<Favorite> = emptyList()
     private var previousDisplayFavs :List<Stock> = emptyList()
 
     private var displayFavorites = MediatorLiveData<List<Stock>>().apply {
@@ -102,7 +138,11 @@ class MainViewModel : ViewModel() {
             //filter out stocks that were already a favorite to minimize network requests
             newStocks = newStocks.stream()
                 .filter {
-                    !removed.contains(it.abbreviation)
+                    val found = removed.stream().filter {fav ->
+                        fav.stockName == it.abbreviation
+                    }.findFirst().orElse(null)
+
+                    found != null
                 }
                 .peek{
                     Log.d("ViewModel", "stock in new stock: " + it.abbreviation)
@@ -135,10 +175,10 @@ class MainViewModel : ViewModel() {
         return displayFavorites
     }
 
-    fun buildFavoritesAsync(added: Collection<String>): Deferred<List<Stock>> = viewModelScope.async {
-        val deferredList = added.map { abbr ->
+    fun buildFavoritesAsync(added: Collection<Favorite>): Deferred<List<Stock>> = viewModelScope.async {
+        val deferredList = added.map { fav ->
             viewModelScope.async {
-                buildFavorite(abbr)
+                buildFavorite(fav.stockName)
             }
         }
         deferredList.awaitAll()
@@ -186,6 +226,25 @@ class MainViewModel : ViewModel() {
      */
     fun setSingleStockAbbr(newSingleStock: String) {
         singleStockAbbr.value = newSingleStock
+    }
+
+    private val followers = MediatorLiveData<Int>().apply {
+        addSource(singleStockAbbr) {
+            dbHelp.fetchLiked(it) {
+                postValue(it.size)
+            }
+        }
+        addSource(displayFavorites) {
+            singleStockAbbr.value?.let { it1 ->
+                dbHelp.fetchLiked(it1) {
+                    postValue(it.size)
+                }
+            }
+        }
+    }
+
+    fun observeFollowers() :LiveData<Int> {
+        return followers
     }
 
     private var sortOrder = MutableLiveData<SortOrder>().apply {

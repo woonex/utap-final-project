@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         authUser.observeUser().observe(this) {
             // XXX Write me, user status has changed
             viewModel.setCurrentAuthUser(it)
+            viewModel.fetchUserFavs()
         }
     }
 }

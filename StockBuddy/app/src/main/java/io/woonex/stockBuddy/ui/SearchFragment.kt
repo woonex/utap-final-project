@@ -37,8 +37,10 @@ class SearchFragment: Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
 
         binding.searchGo.setOnClickListener {
-            //TODO get the data from the search
-            //TODO display the search
+            binding.notificationArea.text = "Searching"
+            binding.notificationArea.visibility = View.VISIBLE
+            adapter.submitList(emptyList())
+
             viewModel.setSearchTerm(binding.actionSearch.text.toString())
             val main = context as MainActivity
             main.hideKeyboard()

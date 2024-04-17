@@ -76,6 +76,11 @@ class OneStockFragment : Fragment() {
             binding.oneStockName.oneStockPrice.text = String.format("%.2f", it.c)
         }
 
+        //observe followers
+        viewModel.observeFollowers().observe(viewLifecycleOwner) {
+            binding.followersCount.text = it.toString()
+        }
+
         binding.lineChart.clear()
         viewModel.observeSingleHistorical().observe(viewLifecycleOwner) {
             val entries = mutableListOf<Entry>()
