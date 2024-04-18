@@ -102,6 +102,9 @@ class MainViewModel : ViewModel() {
         return found != null
     }
 
+    /** Removes an item if it's favorite, adds an item if it's not favorite
+     *
+     */
     fun flipFavorite(abbr: String) : Boolean {
         val initialList : MutableList<Favorite> = favNames.value?.toMutableList() ?: return false
         val data = if (isFavorite(abbr)) {
@@ -126,6 +129,7 @@ class MainViewModel : ViewModel() {
         return data
     }
 
+    //quick cacheing for items to see what has changed to maintain stateful information without having to fetch everything again
     private var previousFavNames :List<Favorite> = emptyList()
     private var previousDisplayFavs :List<Stock> = emptyList()
 
@@ -159,6 +163,7 @@ class MainViewModel : ViewModel() {
             //add the stocks that were added by the user
             Log.d("ViewModel", "All stocks gathered: $newStocks")
 
+            //pull all stocks
             viewModelScope.launch {
                 val builtStocks = buildFavoritesAsync(added).await()
                 Log.d("ViewModel", "All built stocks: $builtStocks")

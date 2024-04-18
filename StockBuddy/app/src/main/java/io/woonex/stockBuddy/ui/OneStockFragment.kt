@@ -39,6 +39,9 @@ class OneStockFragment : Fragment() {
         return binding.root
     }
 
+    /**Sets a favorite item resource
+     *
+     */
     private fun setFavorite(isFav: Boolean) {
         val favIcon = if (isFav) {
             R.drawable.ic_favorite_black_24dp
@@ -81,6 +84,7 @@ class OneStockFragment : Fragment() {
             binding.followersCount.text = it.toString()
         }
 
+        //setup line chart
         binding.lineChart.clear()
         viewModel.observeSingleHistorical().observe(viewLifecycleOwner) {
             val entries = mutableListOf<Entry>()
@@ -89,7 +93,7 @@ class OneStockFragment : Fragment() {
             Log.d("First date:", it[0].date.toString())
             Log.d("last date:", it[it.lastIndex].date.toString())
             val xref: Long = it[0].date.toEpochSecond(ZoneOffset.UTC)
-            val axisValueFormatter = AxisValueFormatter(xref, true)
+            val axisValueFormatter = AxisValueFormatter(xref, false)
 
             for (timeData in it) {
                 entries.add(Entry((timeData.date.toEpochSecond(ZoneOffset.UTC) - xref).toFloat(), timeData.stockPrice.closePrice.toFloat()))
@@ -181,6 +185,9 @@ class OneStockFragment : Fragment() {
         binding.recommendationDate.text = ""
     }
 
+    /** Sets the related stocks to the current ones
+     *
+     */
     private fun setRelated(stocks: List<Stock> = listOf(Stock(""), Stock(""), Stock(""))) {
         var i = 1
         for (stock in stocks) {

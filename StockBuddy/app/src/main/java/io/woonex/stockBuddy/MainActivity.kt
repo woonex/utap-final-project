@@ -11,6 +11,9 @@ import io.woonex.stockBuddy.databinding.ActionBarBinding
 import io.woonex.stockBuddy.databinding.ActivityMainBinding
 import io.woonex.stockBuddy.ui.MainViewModel
 
+/** This is adapted from both the FC8 and HW4 reddit
+ *
+ */
 class MainActivity : AppCompatActivity() {
     private var actionBarBinding: ActionBarBinding? = null
     private val viewModel: MainViewModel by viewModels()
@@ -59,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         lifecycle.addObserver(authUser)
 
         authUser.observeUser().observe(this) {
-            // XXX Write me, user status has changed
             viewModel.setCurrentAuthUser(it)
             viewModel.fetchUserFavs()
         }

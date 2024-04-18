@@ -34,7 +34,6 @@ class SearchRowAdapter(private val viewModel: MainViewModel,
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        //TODO("Not yet implemented")
         val item = getItem(position)
         val binding = holder.searchBinding
 

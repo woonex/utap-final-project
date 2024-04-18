@@ -26,20 +26,6 @@ class HomeFragment: Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter :StockRowAdapter
 
-    companion object {
-        fun getFilteredList(searchTerm: String, original: List<Stock>) :List<Stock> {
-            val filteredList = mutableListOf<Stock>()
-            for (current in original) {
-                val isFound: Boolean = current.searchFor(searchTerm)
-                if (isFound) {
-                    filteredList.add(current)
-                }
-            }
-
-            return filteredList
-        }
-    }
-
     // Set up the adapter and recycler view
     private fun initAdapter(binding: FragmentRvBinding) {
         val postRowAdapter = StockRowAdapter(viewLifecycleOwner, viewModel) {
@@ -48,13 +34,10 @@ class HomeFragment: Fragment() {
             navController.navigate(action)
         }
 
-
-//        viewModel.repoFetch()
         binding.recyclerView.adapter = postRowAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-
-
+        //setup listener to duration listener
         binding.durationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 Log.d("woonex", "World")
@@ -77,6 +60,7 @@ class HomeFragment: Fragment() {
             }
         }
 
+        //setup sort order listener
         binding.sortOrderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -95,8 +79,10 @@ class HomeFragment: Fragment() {
             }
         }
 
+        //set the adapter
         adapter = postRowAdapter
 
+        //do some initial setup for the visibility
         binding.loadingFavorites.visibility = View.VISIBLE
         binding.recyclerView.visibility = View.GONE
         binding.noFavoritesNotice.visibility = View.GONE
@@ -150,7 +136,6 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(javaClass.simpleName, "onViewCreated")
-        // XXX Write me.  Set title based on current subreddit
         initAdapter(this.binding)
 
         val title = "Stocks"

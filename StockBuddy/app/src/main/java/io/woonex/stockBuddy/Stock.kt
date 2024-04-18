@@ -3,6 +3,9 @@ package io.woonex.stockBuddy
 import io.woonex.stockBuddy.alpha.TimeData
 import java.io.Serializable
 
+/** the backbone of what is being displayed on the data
+ *
+ */
 data class Stock(
     val abbreviation:String,
     val name:String = "",

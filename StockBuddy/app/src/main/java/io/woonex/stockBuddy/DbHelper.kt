@@ -4,6 +4,9 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/** A class that helps with managing firestore database items. Adapted from FC8
+ *
+ */
 class DbHelper {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val rootCollection = "userData"

@@ -67,7 +67,7 @@ class StockRowAdapter(private val lifecycleOwner: LifecycleOwner,
         rowBinding.abbreviation.text = item.abbreviation
         rowBinding.currentPrice.text = formatDecimal(item.currentPrice)
 
-
+        //show or hide the prices if it's open
         if (item.open == null) {
             rowBinding.openPrice.visibility = View.INVISIBLE
             rowBinding.openText.visibility = View.INVISIBLE
@@ -143,7 +143,7 @@ class StockRowAdapter(private val lifecycleOwner: LifecycleOwner,
                 }
             }
 
-            val axisValueFormatter = AxisValueFormatter(xref, true)
+            val axisValueFormatter = AxisValueFormatter(xref, false)
             LineChartUtils.setupLineChart(rowBinding.lineChart, entries, timeScope.toString(), axisValueFormatter)
         }
     }

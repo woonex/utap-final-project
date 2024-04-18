@@ -4,6 +4,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 
+/** A data class for sending data to the Firestore Database
+ *
+ */
 data class Favorite(
     val ownerUid: String = "",
     var stockName: String = "",

@@ -46,6 +46,7 @@ class SearchFragment: Fragment() {
             main.hideKeyboard()
         }
 
+        //pull the search results data
         viewModel.observeSearchResults().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.notificationArea.visibility = View.VISIBLE

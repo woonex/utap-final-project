@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+// This was largely used from the FC8 assignment
 // This is our abstract concept of a User, which is visible
 // outside AuthUser.  That way, client code will not change
 // if we use something other than Firebase for authentication

@@ -9,7 +9,10 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-public class AxisValueFormatter(private val referenceTimestamp : Long, private val intraDay: Boolean) : ValueFormatter()  {
+/**Formats an axis based on teh hour date
+ * if intraDay is true will format the dates by the hours in the day or if false will format as days
+ */
+class AxisValueFormatter(private val referenceTimestamp : Long, private val intraDay: Boolean) : ValueFormatter()  {
     companion object {
         private val dataFormat : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         private val intraDayFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")

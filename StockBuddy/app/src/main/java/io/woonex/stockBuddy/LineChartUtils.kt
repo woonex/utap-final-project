@@ -10,6 +10,9 @@ import com.github.mikephil.charting.data.LineDataSet
 
 import com.github.mikephil.charting.formatter.ValueFormatter
 
+/** A utility class that sets up line charts
+ *
+ */
 class LineChartUtils {
     companion object {
         fun setupLineChart(
@@ -18,6 +21,7 @@ class LineChartUtils {
             title: String = "Stock Prices",
             xAxisFormatter: ValueFormatter? = null) {
 
+            //build x axis
             val xAxis: XAxis = lineChart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)
@@ -28,6 +32,7 @@ class LineChartUtils {
                 xAxis.valueFormatter = xAxisFormatter
             }
 
+            //build y axis
             val yAxisRight: YAxis = lineChart.axisRight
             yAxisRight.setDrawLabels(true)
             yAxisRight.setDrawAxisLine(true)
@@ -43,6 +48,7 @@ class LineChartUtils {
             val first = entries[0]
             val last = entries[entries.size - 1]
 
+            //setup colors
             dataSet.color = if (first.y > last.y) {
                 Color.RED
             } else {
@@ -52,6 +58,7 @@ class LineChartUtils {
             dataSet.setDrawValues(false)
             dataSet.setDrawCircles(false)
 
+            //set data
             val lineData = LineData(dataSet)
             lineChart.data = lineData
             lineData.setDrawValues(false)
