@@ -70,9 +70,16 @@ class MainViewModel : ViewModel() {
         value = mutableListOf()
     }
 
+    private var haveInitialized = false
+
+    fun getIsInitialized():Boolean {
+        return this.haveInitialized
+    }
+
     fun fetchUserFavs() {
         dbHelp.fetchFavorites(currentAuthUser.uid) {
             favNames.postValue(it)
+            haveInitialized = true
         }
     }
 

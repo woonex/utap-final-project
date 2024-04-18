@@ -97,7 +97,9 @@ class HomeFragment: Fragment() {
 
         adapter = postRowAdapter
 
-        handleRvListSubmission(listOf())
+        binding.loadingFavorites.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.GONE
+        binding.noFavoritesNotice.visibility = View.GONE
         viewModel.observeDisplayFavorites().observe(viewLifecycleOwner) {
             handleRvListSubmission(it)
         }
@@ -120,12 +122,17 @@ class HomeFragment: Fragment() {
     }
 
     private fun handleRvListSubmission(stocks : List<Stock>) {
+        if (!viewModel.getIsInitialized()) {
+            return
+        }
         if (stocks.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
             binding.noFavoritesNotice.visibility = View.VISIBLE
+            binding.loadingFavorites.visibility = View.GONE
         } else {
             binding.recyclerView.visibility = View.VISIBLE
             binding.noFavoritesNotice.visibility = View.GONE
+            binding.loadingFavorites.visibility = View.GONE
         }
         adapter.submitList(stocks)
     }
