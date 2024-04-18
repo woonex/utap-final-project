@@ -10,14 +10,22 @@ class AlphaRepository (private val alphaApi : AlphaApi) {
 
     suspend fun getDaily(symbol: String) : List<TimeData> {
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//        var allData = alphaApi.dailyData(symbol).dailyAlphaData.entries.stream()
-        var allData = alphaApi.dailyData().dailyAlphaData.entries.stream()
-            .map {
-                TimeData(LocalDate.parse(it.key, dateFormatter).atStartOfDay(), it.value)
-            }
-            .collect(Collectors.toList())
 
-        allData = allData.sortedBy { it.date }
-        return allData
+        var allData: MutableList<TimeData> = try {
+            alphaApi.dailyData(symbol).dailyAlphaData.entries.stream()
+    //        var allData = alphaApi.dailyData().dailyAlphaData.entries.stream()
+                .map {
+                    TimeData(LocalDate.parse(it.key, dateFormatter).atStartOfDay(), it.value)
+                }
+                .collect(Collectors.toList())
+        } catch (e: Exception) {
+            alphaApi.dailyDataDemo().dailyAlphaData.entries.stream()
+                .map {
+                    TimeData(LocalDate.parse(it.key, dateFormatter).atStartOfDay(), it.value)
+                }
+                .collect(Collectors.toList())
+        }
+        allData = allData.sortedBy { it.date }.toMutableList()
+        return allData.toList()
     }
 }

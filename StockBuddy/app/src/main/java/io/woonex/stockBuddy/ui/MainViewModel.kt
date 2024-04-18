@@ -342,7 +342,6 @@ class MainViewModel : ViewModel() {
     fun observeRecommendation() : LiveData<RecommendationTrend> {
         return recommendation
     }
-
     private var similar = MediatorLiveData<List<Stock>>().apply{
         addSource(singleStockAbbr) {currentStockAbbr ->
             postValue(emptyList())
@@ -368,6 +367,10 @@ class MainViewModel : ViewModel() {
                 postValue(fullStocks)
             }
         }
+    }
+
+    fun clearSimilar() {
+        this.similar.postValue(emptyList())
     }
 
     fun observeSimilar() : LiveData<List<Stock>> {

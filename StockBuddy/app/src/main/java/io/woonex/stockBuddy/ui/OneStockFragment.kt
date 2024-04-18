@@ -213,6 +213,8 @@ class OneStockFragment : Fragment() {
                 else String.format("%.2f", stock.currentPrice)
 
             field?.root?.setOnClickListener {
+                viewModel.clearSimilar()
+                //todo add here
                 val navController = findNavController()
                 val action = OneStockFragmentDirections.actionOneStockFragmentToOneStockFragment(stock.abbreviation)
                 navController.navigate(action)

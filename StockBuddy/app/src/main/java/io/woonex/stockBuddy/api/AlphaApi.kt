@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface AlphaApi {
 
@@ -15,10 +16,14 @@ interface AlphaApi {
 //    suspend fun weeklyData(@Query("symbol") symbol: String) : WeeklyAlphaData
 
     @GET("/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo")
-    suspend fun dailyData() : DailyAlphaData
+    suspend fun dailyDataDemo() : DailyAlphaData
+
+    @GET("/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=" + key)
+    suspend fun dailyData(@Query("symbol") symbol: String) : DailyAlphaData
 
     companion object {
-        private const val key = "C4GO7JJ25MVWL5SR"
+//        private const val key = "C4GO7JJ25MVWL5SR"
+        private const val key = "wrong"
 
         var httpurl = HttpUrl.Builder()
             .scheme("https")
