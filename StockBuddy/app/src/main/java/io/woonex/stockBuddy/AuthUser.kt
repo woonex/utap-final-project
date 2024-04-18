@@ -95,7 +95,6 @@ class AuthUser(private val registry: ActivityResultRegistry) :
                 AuthUI.IdpConfig.EmailBuilder().build()
             )
 
-            // XXX Write me. Create and launch sign-in intent
             // setIsSmartLockEnabled(false) solves some problems
             val signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()

@@ -192,7 +192,6 @@ class MainViewModel : ViewModel() {
     }
 
     suspend fun buildFavorite(abbr : String) :Stock {
-        //TODO do more here
         return withContext(Dispatchers.IO) {
             val quote = finnhubRepo.getQuote(abbr)
             val historical = alphaRepo.getDaily(abbr)

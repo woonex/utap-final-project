@@ -62,8 +62,6 @@ class SearchFragment: Fragment() {
         }
 
         adapter.submitList(emptyList())
-
-        //TODO need to fetch from repo for user
     }
 
     override fun onCreateView(

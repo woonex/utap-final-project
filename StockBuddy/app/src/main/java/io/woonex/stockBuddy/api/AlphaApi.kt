@@ -2,8 +2,6 @@ package io.woonex.stockBuddy.api
 
 import com.google.gson.GsonBuilder
 import io.woonex.stockBuddy.alpha.DailyAlphaData
-import io.woonex.stockBuddy.alpha.InterdayData5
-import io.woonex.stockBuddy.alpha.WeeklyAlphaData
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,12 +13,6 @@ interface AlphaApi {
 
 //    @GET("/query?function=TIME_SERIES_WEEKLY&apikey=" + key)
 //    suspend fun weeklyData(@Query("symbol") symbol: String) : WeeklyAlphaData
-
-    @GET("/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo")
-    suspend fun weeklyData() : WeeklyAlphaData
-
-    @GET("/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo")
-    suspend fun interdayData() : InterdayData5
 
     @GET("/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo")
     suspend fun dailyData() : DailyAlphaData
