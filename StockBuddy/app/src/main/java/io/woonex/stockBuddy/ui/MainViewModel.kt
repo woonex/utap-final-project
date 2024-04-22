@@ -9,16 +9,12 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import io.finnhub.api.models.EarningResult
-import io.finnhub.api.models.EarningsCalendar
 import io.finnhub.api.models.Quote
 import io.finnhub.api.models.RecommendationTrend
 import io.finnhub.api.models.SymbolLookupInfo
 import io.woonex.stockBuddy.DbHelper
 import io.woonex.stockBuddy.Favorite
-import io.woonex.stockBuddy.R
 import io.woonex.stockBuddy.SortOrder
 import io.woonex.stockBuddy.Stock
 import io.woonex.stockBuddy.TimeScope

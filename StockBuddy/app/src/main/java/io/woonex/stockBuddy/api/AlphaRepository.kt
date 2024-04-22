@@ -13,7 +13,6 @@ class AlphaRepository (private val alphaApi : AlphaApi) {
 
         var allData: MutableList<TimeData> = try {
             alphaApi.dailyData(symbol).dailyAlphaData.entries.stream()
-    //        var allData = alphaApi.dailyData().dailyAlphaData.entries.stream()
                 .map {
                     TimeData(LocalDate.parse(it.key, dateFormatter).atStartOfDay(), it.value)
                 }

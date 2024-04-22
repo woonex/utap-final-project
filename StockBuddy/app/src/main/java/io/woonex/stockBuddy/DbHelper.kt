@@ -7,7 +7,7 @@ import com.google.firebase.firestore.Query
 /** A class that helps with managing firestore database items. Adapted from FC8
  *
  */
-class DbHelper {
+class DbHelper() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val rootCollection = "userData"
 
@@ -33,7 +33,21 @@ class DbHelper {
         resultListener: (List<Favorite>) -> Unit
     ) {
         val query = db.collection(rootCollection).whereEqualTo("stockName", abbr)
-        get(query, resultListener)
+        query.addSnapshotListener { value, error ->
+            if (error != null) {
+                resultListener(emptyList())
+                return@addSnapshotListener
+            }
+            if (value != null) {
+                resultListener(value.documents.mapNotNull {
+                    it.toObject(Favorite::class.java)
+                })
+            } else {
+                resultListener(emptyList())
+            }
+        }
+
+//        get(query, resultListener)//don't do a query, do a live data instead
     }
 
     fun fetchFavorites(
