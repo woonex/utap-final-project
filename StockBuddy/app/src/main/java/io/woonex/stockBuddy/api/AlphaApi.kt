@@ -22,8 +22,7 @@ interface AlphaApi {
     suspend fun dailyData(@Query("symbol") symbol: String) : DailyAlphaData
 
     companion object {
-//        private const val key = "C4GO7JJ25MVWL5SR"
-        private const val key = "wrong"
+        private const val key = "C4GO7JJ25MVWL5SR"
 
         var httpurl = HttpUrl.Builder()
             .scheme("https")
