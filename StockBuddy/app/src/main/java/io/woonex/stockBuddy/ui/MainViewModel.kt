@@ -149,7 +149,7 @@ class MainViewModel : ViewModel() {
                         fav.stockName == it.abbreviation
                     }.findFirst().orElse(null)
 
-                    found != null
+                    found == null
                 }
                 .peek{
                     Log.d("ViewModel", "stock in new stock: " + it.abbreviation)
